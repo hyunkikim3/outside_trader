@@ -25,7 +25,7 @@ def scrape_discussion(code):
                 date, time = time.split(" ")
                 date_list = date.split(".")
                 time_list = time.split(":")
-                pre_time = datetime(int(date_list[0]), int(date_list[1]), int(date_list[2]), int(time_list[0]), int(time_list[1]))
+                pre_time = datetime(int(date_list[0]), int(date_list[1]), int(date_list[2]))
                 korea_time = timezone('Asia/Seoul')
                 pre_time = korea_time.localize(pre_time, is_dst = True)
                 now = datetime.now(tz = timezone('Asia/Seoul'))
