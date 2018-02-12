@@ -35,7 +35,6 @@ def scrape_discussion(code):
                     click += int(info_list[4].text)
                     like += int(info_list[5].text)
                     dislike += int(info_list[6].text)
-                    print(post_num, len(unique_id), click, like, dislike)
                 else:
                     post_dic["post_num"] = post_num
                     post_dic["unique_id"] = len(unique_id)
