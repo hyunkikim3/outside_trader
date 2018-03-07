@@ -11,7 +11,7 @@ COLUMNS = ["time", "KOSPI_balance", "KOSDAQ_balance", "KNN_balance", \
 
 def transform(filename, col_list):
 	'''
-	Split balance data of kospi and kosdaq and different models	balance
+	Split balance data of kospi and kosdaq and different models
 	into different json files with time as epoch GMT as index. 
 
 	Inputs:
