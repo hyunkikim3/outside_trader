@@ -3,7 +3,20 @@ import urllib3
 from datetime import tzinfo, timedelta, datetime
 from pytz import timezone
 
-def scrape_discussion(code):
+def scrape_discussion(code, max_page=10):
+    '''
+    scrape the real time discussion forum information (post_num, unique_id, \
+    click, like, dislike) of a stock with given stock code from the day \
+    before (current time 2018-2-14 15:00 then scrape cumulative info from \
+    2018-2-13 00:00 to now) and save it inside a dictionary.
+
+    Input:
+      code: string of stock code, e.g. '035720'
+      max_page: maximum number of pages to go through
+
+    Return: a dictionary
+    '''
+
     page_num = 1
     post_dic = {}
     post_num = 0
@@ -11,7 +24,7 @@ def scrape_discussion(code):
     like = 0
     dislike = 0
     unique_id = set()
-    while page_num <= 10: ###
+    while page_num <= max_page: ###
         target = "http://finance.naver.com/item/board.nhn?code=" + code + "&page=" + str(page_num)
         pm = urllib3.PoolManager()
         html = pm.urlopen(url=target, method="GET").data
