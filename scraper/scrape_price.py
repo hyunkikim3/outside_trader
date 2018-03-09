@@ -48,7 +48,7 @@ def add_price_to_file(filename, code):
 	  filename: string of csv filename
 	  code: string of stock code
 
-	 Reurn
+	Return
 	'''
 
 	fieldnames = ["price", "value_dif", "value_dif_per", "yestday_close", \
