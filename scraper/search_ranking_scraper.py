@@ -34,10 +34,11 @@ def find_all_stock():
 
     return stock_dict
 
+
 def job_function():
-    '''
-    The job function of the cron job to scrape real time scraper.
-    '''
+    
+    #The job function of the cron job to scrape real time scraper.
+    
     
     rank = find_all_stock()
     tz = pytz.timezone('Asia/Seoul')
@@ -45,10 +46,9 @@ def job_function():
     
     rank["time"] = str(seoul_now)[:16]
     
-    json = json.dumps(rank, ensure_ascii=False)
-    f = open(str(rank["time"])+".json","w", encoding='UTF-8')
-    f.write(json)
-    f.close()
+    filename = str(rank["time"])+".json"
+    with open(filename,"w", encoding='UTF-8') as f:
+    	json.dump(rank, f)
     
     return 
 
@@ -57,3 +57,5 @@ sched = BlockingScheduler()
 sched.add_job(job_function, 'cron', month='3', day='1-31', hour='0-23', \
               minute='0-59/10')
 sched.start()
+
+
