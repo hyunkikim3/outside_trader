@@ -49,7 +49,7 @@ def company_file(filename, code):
 
 	Inputs: 
 	filename: the string of filename
-	code: the string of stock code
+	code: the string of stock code, e.g. 035720
 
 	Return
 	'''
