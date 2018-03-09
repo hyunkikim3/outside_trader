@@ -2,11 +2,18 @@ import bs4
 import urllib3
 
 def scrape_price_dayhigh(code):
-	'''
-	code: string
+    '''
+    scrape the tuple of the maximum and minimum of a stock today
+    and save them as a tuple.
+
+    Input: 
+      code: string of stock
+
+    Return: a tuple
     '''
 
-    target = "http://finance.naver.com/item/sise_day.nhn?code=" + code + "&page=1"
+    target = "http://finance.naver.com/item/sise_day.nhn?code=" + code + \
+             "&page=1"
     pm = urllib3.PoolManager()
     html = pm.urlopen(url=target, method="GET").data
     soup = bs4.BeautifulSoup(html, 'lxml')
