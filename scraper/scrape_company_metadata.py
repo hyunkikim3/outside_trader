@@ -8,7 +8,7 @@ def scrape_company_metadata(code):
 	and save it inside a dictionary.
 
 	Input:
-	  code: the string of stock code, e.g. 035720
+	  code: the string of stock code, e.g. '035720'
 
 	Return: a dictionary
 	'''
@@ -48,8 +48,10 @@ def company_file(filename, code):
 	save company data with given stock code in the file with given filename
 
 	Inputs: 
-	filename: the string of filename
-	code: the string of stock code, e.g. 035720
+	  filename: the string of filename
+	  code: the string of stock code, e.g. '035720'
+
+
 
 	Return
 	'''
