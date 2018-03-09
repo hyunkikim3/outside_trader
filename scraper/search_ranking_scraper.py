@@ -39,7 +39,7 @@ def job_function():
     The job function of the cron job to scrape real time scraper.
     '''
     
-    rank = find_all_stock(TARGET)
+    rank = find_all_stock()
     tz = pytz.timezone('Asia/Seoul')
     seoul_now = datetime.now(tz)
     
