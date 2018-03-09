@@ -37,7 +37,9 @@ def find_all_stock():
 
 def job_function():
     
-    #The job function of the cron job to scrape real time scraper.
+    '''
+    The job function of the cron job to scrape real time scraper.
+    '''
     
     
     rank = find_all_stock()
