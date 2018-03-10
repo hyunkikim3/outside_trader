@@ -1,3 +1,5 @@
+#transform time in epoch GMT format together with each of the specific 
+#columns in model files for graphing HighStocks
 import time
 import calendar 
 import json
@@ -24,13 +26,16 @@ def transform(filename, col_list):
 	with open(filename, 'r') as f:
 		balance = json.load(f)
 	balance_df = pd.DataFrame(balance, columns = COLUMNS)
-	time_df = pd.DataFrame(np.nan, index = range(balance_df.shape[0]), columns = ['time'])
+	time_df = pd.DataFrame(np.nan, index = range(balance_df.shape[0]), \
+		                   columns = ['time'])
 	for index, row in balance_df.iterrows():
 		timestr = row['time']
-		dg_time = calendar.timegm(time.strptime(timestr, "%Y-%m-%d %H:%M")) * 1000
+		dg_time = calendar.timegm(time.strptime(timestr, "%Y-%m-%d %H:%M")) \
+		                                        * 1000
 		time_df.set_value(index, 'time', dg_time)
 	for col in col_list:
-		df = pd.concat([time_df, pd.DataFrame(balance_df[col], columns=[col])], axis = 1)
+		df = pd.concat([time_df, pd.DataFrame(balance_df[col], \
+			            columns=[col])], axis = 1)
 		filename = col + '.json'
 		df.to_json(filename, orient = 'values')
 
