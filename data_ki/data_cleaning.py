@@ -1,6 +1,6 @@
 #combine raw data files into one single file and transformed it with all 
 #variables needed
-#run this file and save a json file for the complete dataset for analysis
+#run this file to save a json file for the complete dataset for analysis
 import pandas as pd
 import numpy as np
 import json
