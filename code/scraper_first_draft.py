@@ -10,7 +10,6 @@ from pytz import timezone
 with open("krx_code.json", "r", encoding="UTF-8") as krx:
     KRX_CODE = json.load(krx)
 
-
 def save_krx_code():
     '''
     Direct copy
