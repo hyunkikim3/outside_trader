@@ -1,13 +1,7 @@
-import scraper
-
 import numpy as np
 import pandas as pd
 import re
 import json
-import bs4
-import urllib3
-from datetime import datetime, tzinfo, timedelta
-from pytz import timezone
 
 try:
     with open("../raw_data/krx_code.json", "r", encoding="UTF-8") as f:
@@ -22,93 +16,9 @@ try:
 
 except FileNotFoundError as e:
     print(e)
-
-
-def combine_price(date, save=False):
-    '''
-    Combine price and discussion info into a dataframe with on the given date
-    and save them in a list
-    Input:
-      date: string, e.g. "2018-03-06"
-    Return: a list
-    '''
-    df = pd.DataFrame(columns=["code", "name", "time", "price", \
-                               "price_dif", "sell", "buy", "volume", \
-                               "variation"])
-    rv = []
-    rv.append(df.columns.tolist())
-
-    time = []
-    for hour in range(9,16):
-        for minute in range(0, 6):
-            if hour != 15 or minute < 4:
-                time.append("../raw_data/discussion/" + date + \
-                "_focus/discussion_" + date + "-" + (("0" + str(hour)) \
-                if hour <= 9 else str(hour))+ "-" + str(minute) + "0.json")
-
-    for t in time:
-        try:
-            with open(t, 'r', encoding='UTF-8') as f:
-                discussion = json.load(f)
-
-        except FileNotFoundError as e:
-            print(e)
-            continue
-
-        opening_increase = "../raw_data/price/" + date + "_price/" + date +\
-                            "_opening_increase.json"
-
-        try:
-            with open(opening_increase, 'r', encoding='UTF-8') as f:
-                increased = json.load(f)
-
-        except FileNotFoundError as e:
-            print(e)
-            continue
-
-
-        for d in discussion:
-            if d["name"] in increased:
-                row = pd.DataFrame(columns=["code", "name", "time", \
-                                            "price", "price_dif", "sell", \
-                                            "buy", "volume", "variation"], \
-                                   data = [[KRX_CODE[d["name"]], d["name"], \
-                                            d["time"], np.nan, np.nan,\
-                                            np.nan, np.nan, np.nan, np.nan]])
-                df = df.append(row)
-
-    df = df.reset_index()
     
-    
-    for idx, row in df[:4].iterrows():
-        timestamp = row["time"]
-        t = re.sub('[ :-]', '', timestamp)
-
-        d = scraper.scrape_price_history(row["code"], t)
-
-        df["price"].iloc[idx] = d["price"]
-        df["price_dif"].iloc[idx] = d["price_dif"]
-        df["sell"].iloc[idx] = d["sell"]
-        df["buy"].iloc[idx] = d["buy"]
-        df["volume"].iloc[idx] = d["volume"]
-        df["variation"].iloc[idx] = d["variation"]
-    
-    rv = []
-    rv.append(df.columns.tolist())
-    for row in df.iterrows():
-        rv.append(row[1].tolist())
-
-    if save:
-
-        with open(date + "_price.json","w", encoding='UTF-8') as f:
-            json.dump(rv, f, ensure_ascii=False)
-
-    return rv
-
-
 kospi = {}
 kosdaq = {}
-
 for month in range(2, 4):
     for day in range(1, 32):
         prefix = "../raw_data/market/2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
@@ -116,7 +26,7 @@ for month in range(2, 4):
         for market in ("KOSPI", "KOSDAQ"):
             filename = prefix + market + "_2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
                        "-" + ("0" + str(day) if day <= 9 else str(day)) + ".json"
-        
+            
             try:
                 with open(filename, 'r', encoding='UTF-8') as f:
                     opened = json.load(f)
@@ -128,7 +38,6 @@ for month in range(2, 4):
 
             except FileNotFoundError:
                 continue
-
 
 company_df = pd.DataFrame(COMPANY_INFO, columns = ["name", "code", \
                                                    "market", "size"])
@@ -160,15 +69,15 @@ COLUMN_PRICE=["code", "name", "time", "price", "price_dif", "sell", "buy", \
               "variation_2", "time_3", "price_3", "price_dif_3", "sell_3", \
               "buy_3", "volume_3", "variation_3"]
 
-COLUMN_TOTAL = ['name', 'code', 'time', 'price', 'time_1', "price_1", \
+COLUMN_TOTAL = ["name", "code", "time", "price", "time_1", "price_1", \
                 "price_dif_1", "sell_1", "buy_1", "volume_1", \
-                "variation_1", 'post_num_1', 'unique_id_1', 'click_1', \
-                'like_1', 'dislike_1', 'time_2', 'price_2', "price_dif_2", \
-                "sell_2", "buy_2", "volume_2", "variation_2", 'post_num_2', \
-                'unique_id_2', 'click_2', 'like_2', 'dislike_2', 'time_3', \
-                'price_3', "price_dif_3", "sell_3", "buy_3", "volume_3", \
-                "variation_3", 'post_num_3', 'unique_id_3', 'click_3', \
-                'like_3', 'dislike_3']
+                "variation_1", "post_num_1", "unique_id_1", "click_1", \
+                "like_1", "dislike_1", "time_2", "price_2", "price_dif_2", \
+                "sell_2", "buy_2", "volume_2", "variation_2", "post_num_2", \
+                "unique_id_2", "click_2", "like_2", "dislike_2", "time_3", \
+                "price_3", "price_dif_3", "sell_3", "buy_3", "volume_3", \
+                "variation_3", "post_num_3", "unique_id_3", "click_3", \
+                "like_3", "dislike_3"]
 
 VAR_TO_TRANSFORM = ['price', 'price_1', 'price_dif_1', 'sell_1', 'buy_1', \
                     'volume_1', 'variation_1', 'price_2', 'price_dif_2', \
@@ -177,10 +86,10 @@ VAR_TO_TRANSFORM = ['price', 'price_1', 'price_dif_1', 'sell_1', 'buy_1', \
                     'variation_3']
 
 MISSING = ["2018-02-27 11:30", "2018-02-27 11:40", "2018-02-27 11:50", \
-            "2018-02-27 12:00", "2018-02-27 12:10", "2018-02-27 12:20", \
-            "2018-02-27 12:30", "2018-02-27 12:40", "2018-02-27 12:50", \
-            "2018-02-27 13:00", "2018-02-27 13:10", "2018-02-27 13:20", \
-            "2018-02-27 13:30", "2018-02-27 13:40"]
+           "2018-02-27 12:00", "2018-02-27 12:10", "2018-02-27 12:20", \
+           "2018-02-27 12:30", "2018-02-27 12:40", "2018-02-27 12:50", \
+           "2018-02-27 13:00", "2018-02-27 13:10", "2018-02-27 13:20", \
+           "2018-02-27 13:30", "2018-02-27 13:40"]
 
 PRICE_SINGLE_COL = ["code", "name", "time", "price", "price_dif", \
                     "sell", "buy", "volume", "variation"]
@@ -201,116 +110,6 @@ SQUARED = ['price_1', 'price_dif_1', 'sell_1', 'buy_1', 'volume_1', \
          'kosdaq_3', 'kospi_trend', 'kosdaq_trend']
 
 
-def open_files(date):
-    ''''
-    Open files for making data frame for the specific date
-    Input:
-      date: string of date, e.g. '2018-03-06', only apply to Feburary 14, 20, 21, 
-            22, 23, 26, 27, 28, and March 2, 3, 6 ,7
-    Return: dictionary, dictionary
-    '''
-    focus_text = "../raw_data/discussion/" + date + "_focus/" +\
-                 date + "_focus_group.json"
-
-    price_text = "../raw_data/price/" + date + "_price/" +\
-                 date + "_price.json"
-    
-    with open(focus_text, 'r', encoding='UTF-8') as f:
-        focus_group = json.load(f)
-    with open(price_text, 'r', encoding='UTF-8') as f:
-        price = json.load(f)
-    
-    return focus_group, price
-
-
-def get_single_time(prefix, hour, minute):
-    '''
-    Get a string of time based on given prefix, hour and min
-    
-    Inputs:
-      prefix: string of path, e.g. "2018-02-28_focus/discussion_2018-02-28"
-      hour: integer of hour, from 9 to 15
-      min: integer of min, from 0 to 6
-    Return: a string of path
-    '''
-    if hour == 15 and minute > 3:
-        return None
-    else:
-        rv = prefix + " " + (("0" + str(hour)) if hour <= 9 else str(hour)) \
-             + ":" + str(minute) + "0.json"
-
-    return rv
-
-
-def get_time_disc(date):
-    '''
-    Get the list for discussion data filenames of different time for the 
-    specific day, e.g. from 2018-03-06 9 am to 3 pm every ten minutes. 
-    Input:
-      date: string of date, e.g. 2018-03-06, only apply to Feburary 14, 20, 
-            21, 22, 23, 26, 27, 28, and March 2, 3, 6 ,7
-    Return: a list
-    '''
-    time = []
-    prefix = date + "_focus/discussion_" + date
-    month = date[6]
-    day = date[8:]
-    if month == "2":
-        for hour in range(9,16):        
-            if day == "26" and hour == 9:
-                continue        
-            elif day == "27" and hour == 11:
-                continue            
-            for minute in range(0, 6):
-                if day == "26" and hour == 10 and minute == 0:
-                    continue            
-                elif day == "27" and hour == 10 and minute > 2:
-                    continue            
-                elif day == "27" and hour == 12 and minute < 3:
-                    continue            
-                time.append(get_single_time(prefix, hour, minute))            
-    elif month == "3":  
-        for hour in range(9,16):        
-            if day == "02" and hour == 9:
-                continue        
-            elif day == "02" and hour == 10:
-                continue        
-            elif day == "02" and hour == 15:
-                continue            
-            for minute in range(0, 6):
-                if day == "02" and hour == 11 and minute < 5:
-                    continue            
-                elif day == "02" and hour == 14 and minute > 4:
-                    continue            
-                time.append(get_single_time(prefix, hour, minute))       
-    
-    return time
-
-
-def df_list_disc(date):
-    '''
-    Store all the discussion file of a given date and store them as a 
-    dataframein a list.
-    Input:
-      date: string of date, e.g. 2018-03-06
-    Return: a list of dataframe
-    '''
-    df_list = []
-    time = get_time_disc(date)
-    for x in time:
-        with open(x, 'r', encoding='UTF-8') as f:
-            discussion = json.load(f)        
-            discuss_df = pd.DataFrame(discussion, columns = ["post_num", \
-                                "unique_id", "click", "like", "dislike", 
-                                "name", "time"])
-            reset_col = ["name", "time", "post_num", "unique_id", "click", \
-                         "like", "dislike"]
-            discuss_df = discuss_df[reset_col]
-            df_list.append(discuss_df)
-
-    return df_list
-
-
 def list_to_df(date, df_list, column_names, key_list):
     ''''
     Merge the dataframes in the list in a specific date
@@ -327,39 +126,28 @@ def list_to_df(date, df_list, column_names, key_list):
         
         if ind >= 8:
             df_total = df.merge(df_list[ind - 8], on = \
-                                key_list).merge(df_list[ind - 9], \
-                                on = key_list).merge(df_list[ind - 10], \
+                                key_list).merge(df_list[ind - 7], \
+                                on = key_list).merge(df_list[ind - 6], \
                                 on = key_list)
             df_total.columns = column_names
             total = pd.concat([total, df_total], axis = 0)
 
-    return total 
+    return total
 
 
-def get_discuss_df(date):
+def get_price(date):
     '''
-    Get total dataframe of discussion from raw files
+    Transform all the raw price files into a data frame
     Input:
       date: string of date, e.g. 2018-03-06
-    Return: a dataframe
+    Return: a datafame
     '''
-    discussion_list = df_list_disc(date)
-    discuss_df = list_to_df(date, discussion_list, COLUMN_DISC, 
-                            ['name']).reset_index().drop(["index"], \
-                            axis = 1)
-
-    return discuss_df
-
-
-def df_list_price(date):
-    '''
-    Get the dataframes of price during different time within a day and store 
-    them in a list. 
-    Input:
-      date: string of date, e.g. 2018-03-06
-    Return: a list
-    '''
-    focus, price = open_files(date)
+    price_text = "../raw_data/price/" + date + "_price/" +\
+                 date + "_price.json"
+    
+    with open(price_text, 'r', encoding='UTF-8') as f:
+        price = json.load(f)
+    
     price_df = pd.DataFrame(price, columns = ["index", "code", "name", \
                                               "time", "price", "price_dif", \
                                               "sell", "buy", "volume", \
@@ -368,49 +156,87 @@ def df_list_price(date):
     text = date + " 09:00"
     price_df = price_df[price_df["time"] != text]
     time_list = price_df['time'].unique().tolist()
+    
     price_df_list = []
     for time in time_list:
         df = price_df[price_df["time"] == time]
         df = df[PRICE_SINGLE_COL]
         price_df_list.append(df)
-        
-    return price_df_list
-
-
-
-def get_price_df(date):
-    '''
-    Transform all the raw price files into a data frame
-    Input:
-      date: string of date, e.g. 2018-03-06
-    Return: a datafame
-    '''
-    price_df_list = df_list_price(date)
+    
     price_df = list_to_df(date, price_df_list, COLUMN_PRICE, \
                           ['code', 'name']).reset_index().drop(["index"], axis = 1)
     
     return price_df
 
 
-def get_total_df(date):
+def get_discussion(date):
     '''
-    Get a total data frame from raw data with both price and discussion 
-    information.
+    Get total dataframe of discussion from raw files
     Input:
       date: string of date, e.g. 2018-03-06
-    Return: a datafame
+    Return: a dataframe
     '''
-    price_df = get_price_df(date)
-    discuss_df = get_discuss_df(date)
-    total_df = pd.merge(price_df, discuss_df, on = ['name', \
-                                                    'time', 'time_1', \
-                                                    'time_2', 'time_3'])
-    total_df = total_df[COLUMN_TOTAL]
+    df_list = []
     
-    return total_df
+    time = []
+    prefix = "../raw_data/discussion/" + date + "_focus/discussion_" + date
+    month = date[6]
+    day = date[8:]
+    if month == "2":
+        for hour in range(9,16):        
+            if day == "26" and hour == 9:
+                continue        
+            elif day == "27" and hour == 11:
+                continue            
+            for minute in range(0, 6):
+                if hour == 15 and minute > 3:
+                    break
+                if day == "26" and hour == 10 and minute == 0:
+                    continue            
+                elif day == "27" and hour == 10 and minute > 2:
+                    continue            
+                elif day == "27" and hour == 12 and minute < 3:
+                    continue            
+                time.append(prefix + "-" + (("0" + str(hour)) if hour <= 9 \
+                            else str(hour)) + "-" + str(minute) + "0.json")
+    
+    elif month == "3":  
+        for hour in range(9,16):    
+            if day == "02" and hour == 9:
+                continue        
+            elif day == "02" and hour == 10:
+                continue        
+            elif day == "02" and hour == 15:
+                continue            
+            for minute in range(0, 6):
+                if hour == 15 and minute > 3:
+                    break
+                if day == "02" and hour == 11 and minute < 5:
+                    continue            
+                elif day == "02" and hour == 14 and minute > 4:
+                    continue            
+                time.append(prefix + "-" + (("0" + str(hour)) if hour <= 9 \
+                            else str(hour)) + "-" + str(minute) + "0.json")
+    
+    for x in time:
+        with open(x, 'r', encoding='UTF-8') as f:
+            discussion = json.load(f)        
+            discuss_df = pd.DataFrame(discussion, columns = ["post_num", \
+                                "unique_id", "click", "like", "dislike", 
+                                "name", "time"])
+            reset_col = ["name", "time", "post_num", "unique_id", "click", \
+                         "like", "dislike"]
+            discuss_df = discuss_df[reset_col]
+            df_list.append(discuss_df)
+    
+    discuss_df = list_to_df(date, df_list, COLUMN_DISC, 
+                            ['name']).reset_index().drop(["index"], \
+                            axis = 1)
+
+    return discuss_df
 
 
-def add_company(date):
+def daily_dataframe(date):
     '''
     Add company info to the dataframe created from the price and discussion
     raw data.
@@ -418,7 +244,13 @@ def add_company(date):
       date: string of date, e.g. 2018-03-06
     Return: a dataframe
     '''
-    total = get_total_df(date)
+    price_df = get_price(date)
+    discuss_df = get_discussion(date)
+    total = pd.merge(price_df, discuss_df, on = ['name', \
+                                                    'time', 'time_1', \
+                                                    'time_2', 'time_3'])
+    total = total[COLUMN_TOTAL]
+    
     total["mkt_cap"] = np.nan
     total["kospi"] = np.nan
     total["kosdaq"] = np.nan
@@ -436,19 +268,8 @@ def add_company(date):
         total.set_value(index,"mkt_cap", mkt_cap)
         total.set_value(index,"kospi", kospi_dummy)
         total.set_value(index,"kosdaq", kosdaq_dummy)
-        total.set_value(index,"trash", trash)  
+        total.set_value(index,"trash", trash)
     
-    return total
-
-def transform_df(date):
-    '''
-    Return a total data frame created from market, price and discussion 
-    raw data with all numeriacal variables' values as floats. 
-    Input:
-      date: string of date, e.g. 2018-03-06
-    Return: a dataframe
-    '''
-    total = add_company(date)
     total.dropna(inplace = True)
     for var in VAR_TO_TRANSFORM:
         total = total[total[var] != '\xa0']
@@ -462,33 +283,21 @@ def transform_df(date):
     return total
 
 
-def total_date_df(dates):
-    '''
-    Make a complete dataframe with info from raw data of discussion, 
-    price and market index combining specidfic dates defined. 
-    Inputs:
-      dates: list of dates, e.g. ['2018-02-28', '2018-03-02']
-    Return: a dataframe
-    '''
-    total_df = pd.DataFrame(columns=COLUMN_TOTAL)
-    for date in dates:
-        df = transform_df(date)
-        if dates == '2018-02-27':
-            df = df[~df['time'].isin(MISSING)]
-        total_df = pd.concat([total_df, df])
-    total_df = total_df.reset_index().drop(["index"], axis = 1)
-
-    return total_df 
-
-
-def complete_df(dates):
+def complete_dataframe(dates):
     '''
     Make a complete dataframe with modified variables ready for analyze.
     Input:
       dates: a list of dates to mark the data
     Return: a dataframe     
     '''
-    total_df = total_date_df(dates)
+    total_df = pd.DataFrame(columns=COLUMN_TOTAL)
+    for date in dates:
+        df = daily_dataframe(date)
+        if date == '2018-02-27':
+            df = df[~df['time'].isin(MISSING)]
+        total_df = pd.concat([total_df, df])
+    total_df = total_df.reset_index().drop(["index"], axis = 1)
+    
     total_df["yesterday_closing_price"] = total_df["price_1"] - \
                                           total_df["price_dif_1"]
     total_df["is_maximum"] = (((total_df["price_1"] / \
@@ -507,7 +316,6 @@ def complete_df(dates):
                              100 < -29.5) | (((total_df["price_3"] / \
                              total_df["yesterday_closing_price"]) - 1) * \
                              100 < -29.5)
-
     total_df["is_minimum"] = total_df["is_maximum"].astype(int)
 
     total_df["price_volatility"] = (((total_df[["price_1", "price_2", \
@@ -612,7 +420,6 @@ def complete_df(dates):
         alpha = per_now - mkt_change
         total_df.set_value(index, 'alpha', alpha)
         
-        #(kospi["2018-02-21 09:20"] / kospi["2018-02-21 last_closing"] - 1) * 100
         last_closing = row["time"][:10] + " last_closing"
         
         total_df.set_value(index, 'kospi_1', (kospi[row["time_1"]] / kospi[last_closing] - 1) * 100)
@@ -655,12 +462,4 @@ def complete_df(dates):
             sqr = row[var] ** 2
             total_df.set_value(index, col_name, sqr)
 
-
     return total_df
-
-DATES = ['2018-02-14', '2018-02-20', '2018-02-21', '2018-02-22', \
-         '2018-02-23', '2018-02-26', '2018-02-27', '2018-02-28', \
-         '2018-03-02', '2018-03-05', '2018-03-06', '2018-03-07']
-
-total_df = complete_df(DATES)
-total_df.to_json('df_Mar_07.json', orient='values')
