@@ -345,7 +345,9 @@ class LOGISTIC_mod:
 
         return y_port.shape[0], y_port.mean()
 
-'''
-Logistic_mod = pd.DataFrame(prob, columns = ['Logistic'])
-Logistic_mod.to_json('Logistic_mod.json', orient='values')
-'''
+
+logistic = LOGISTIC_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
+                        Y_TEST, VALID_IN, TEST_IN)
+logistic_mod = pd.DataFrame(logistic.y_pred, columns = ['Logistic'])
+logistic_mod.to_json('Logistic_mod.json', orient='values')
+
