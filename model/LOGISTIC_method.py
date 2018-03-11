@@ -259,7 +259,7 @@ class LOGISTIC_mod:
     
         num = 0
         mse_min=1
-        while num < x_train.shape[0]:
+        while num < x_train.shape[1]:
             best_var, mse_min_new = self.find_best_var(var_list, x_train, \
                                                        y_train, x_valid, \
                                                        y_valid, valid_in, \
