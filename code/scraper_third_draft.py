@@ -436,12 +436,12 @@ def scrape_market_history(date, save=False):
 
             if mkt == "KOSPI":
                 if flag:
-                    kospi["last_closing"] = index - delta
+                    kospi[date + " last_closing"] = index - delta
                 kospi[date + " " + t[0:2] + ":" + t[2:4]] = index
 
             else:
                 if flag:
-                    kosdaq["last_closing"] = index - delta
+                    kosdaq[date + " last_closing"] = index - delta
 
                 kosdaq[date + " " + t[0:2] + ":" + t[2:4]] = index
 
