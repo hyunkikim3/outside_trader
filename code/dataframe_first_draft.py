@@ -10,8 +10,8 @@ from datetime import datetime, tzinfo, timedelta
 from pytz import timezone
 
 try:
-    with open("../raw_data/krx_code.json", "r", encoding="UTF-8") as krx:
-        KRX_CODE = json.load(krx)
+    with open("../raw_data/krx_code.json", "r", encoding="UTF-8") as f:
+        KRX_CODE = json.load(f)
 
 except FileNotFoundError as e:
     print(e)
@@ -100,8 +100,8 @@ def combine_price(date, save=False):
 
 
 
-with open("krx_code.json", 'r', encoding='UTF-8') as krx:
-    KRX_CODE = json.load(krx)
+with open("krx_code.json", 'r', encoding='UTF-8') as f:
+    KRX_CODE = json.load(f)
 
 with open("company_info.json", 'r', encoding='UTF-8') as f:
     COMPANY_INFO = json.load(f)
@@ -165,7 +165,7 @@ VAR_TO_TRANSFORM = ['price', 'price_1', 'price_dif_1', 'sell_1', 'buy_1', \
                     'price_3', 'price_dif_3', 'sell_3', 'buy_3', 'volume_3', \
                     'variation_3']
 
-DEL_TIME = ["2018-02-27 11:30", "2018-02-27 11:40", "2018-02-27 11:50", \
+MISSING = ["2018-02-27 11:30", "2018-02-27 11:40", "2018-02-27 11:50", \
             "2018-02-27 12:00", "2018-02-27 12:10", "2018-02-27 12:20", \
             "2018-02-27 12:30", "2018-02-27 12:40", "2018-02-27 12:50", \
             "2018-02-27 13:00", "2018-02-27 13:10", "2018-02-27 13:20", \
@@ -174,7 +174,7 @@ DEL_TIME = ["2018-02-27 11:30", "2018-02-27 11:40", "2018-02-27 11:50", \
 PRICE_SINGLE_COL = ["code", "name", "time", "price", "price_dif", \
                     "sell", "buy", "volume", "variation"]
 
-TO_SQ = ['price_1', 'price_dif_1', 'sell_1', 'buy_1', 'volume_1', \
+SQUARED = ['price_1', 'price_dif_1', 'sell_1', 'buy_1', 'volume_1', \
          'variation_1', 'post_num_1', 'unique_id_1', 'click_1', 'like_1', \
          'dislike_1', 'price_2', 'price_dif_2', 'sell_2', 'buy_2', \
          'volume_2', 'variation_2', 'post_num_2', 'unique_id_2', 'click_2', \
@@ -199,16 +199,18 @@ def open_files(date):
     Return: dictionary, dictionary
     '''
     
-    focus_text = date + "_focus/" + date + "_focus_group.json"
+    focus_text = "../raw_data/discussion/" + date + "_focus/" +\
+                 date + "_focus_group.json"
 
-    price_text = date + "_price_and_everything.json"
+    price_text = "../raw_data/price/" + date + "_price/" +\
+                 date + "_price.json"
     
-    with open(focus_text, 'r', encoding='UTF-8') as focus_group:
-        focus = json.load(focus_group)
-    with open(price_text, 'r', encoding='UTF-8') as pnc:
-        price = json.load(pnc)
+    with open(focus_text, 'r', encoding='UTF-8') as f:
+        focus_group = json.load(f)
+    with open(price_text, 'r', encoding='UTF-8') as f:
+        price = json.load(f)
     
-    return focus, price
+    return focus_group, price
 
 
 def get_single_time(prefix, hour, minute):
@@ -245,7 +247,7 @@ def get_time_disc(date):
     prefix = date + "_focus/discussion_" + date
     month = date[6]
     day = date[8:]
-    if month == '2':
+    if month == "2":
         for hour in range(9,16):        
             if day == "26" and hour == 9:
                 continue        
@@ -259,7 +261,7 @@ def get_time_disc(date):
                 elif day == "27" and hour == 12 and minute < 3:
                     continue            
                 time.append(get_single_time(prefix, hour, minute))            
-    elif month == '3':  
+    elif month == "3":  
         for hour in range(9,16):        
             if day == "02" and hour == 9:
                 continue        
@@ -303,7 +305,7 @@ def df_list_disc(date):
     return df_list
 
 
-def list_to_df(date, df_list, column_names, key_list, freq):
+def list_to_df(date, df_list, column_names, key_list):
     ''''
     Merge the dataframes in the list in a specific date
     into a total dataframe based on the gap of prediction.
@@ -312,26 +314,16 @@ def list_to_df(date, df_list, column_names, key_list, freq):
       df_list: a list of dataframe
       column_names: list of columns
       key_list: list of columns to merge data frames
-      freq: string, gap of prediction(predict price one hour later, half an 
-            hour later or ten minutes later), in one of the following string,
-            'low'(ten minutes later), 'medium'(half an hour later), 'high'
-            (one hour later)
     Return: a dataframe
     '''
     total = pd.DataFrame(columns=column_names)
     for ind, df in enumerate(df_list):
-        if freq == 'low':
-            cutoff = 3
-        elif freq == 'medium':
-            cutoff = 5
-        elif freq == 'high':
-            cutoff = 8
-
+        
         if ind >= cutoff:
             df_total = df.merge(df_list[ind - 8], on = \
-                                key_list).merge(df_list[ind - cutoff  + 1], \
-                                on = key_list).merge(df_list[ind - cutoff + \
-                                                     2], on = key_list)
+                                key_list).merge(df_list[ind - 9], \
+                                on = key_list).merge(df_list[ind - 10], \
+                                on = key_list)
             df_total.columns = column_names
             total = pd.concat([total, df_total], axis = 0)
 
@@ -349,7 +341,7 @@ def get_discuss_df(date):
 
     discussion_list = df_list_disc(date)
     discuss_df = list_to_df(date, discussion_list, COLUMN_DISC, 
-                            ['name'], 'high').reset_index().drop(["index"], \
+                            ['name']).reset_index().drop(["index"], \
                             axis = 1)
 
     return discuss_df
@@ -393,7 +385,7 @@ def get_price_df(date):
 
     price_df_list = df_list_price(date)
     price_df = list_to_df(date, price_df_list, COLUMN_PRICE, \
-                          ['code', 'name'], 'high').reset_index().drop(["index"], axis = 1)
+                          ['code', 'name']).reset_index().drop(["index"], axis = 1)
     
     return price_df
 
@@ -441,10 +433,10 @@ def add_company(date):
 
         trash = 1 if row["code"] in TRASH else 0
 
-        total.set_value(index,'mkt_cap', mkt_cap)
-        total.set_value(index,'kospi', kospi)
-        total.set_value(index,'kosdaq', kosdaq)
-        total.set_value(index,'trash', trash)  
+        total.set_value(index,"mkt_cap", mkt_cap)
+        total.set_value(index,"kospi", kospi)
+        total.set_value(index,"kosdaq", kosdaq)
+        total.set_value(index,"trash", trash)  
     
     return total
 
@@ -484,7 +476,7 @@ def total_date_df(dates):
     for date in dates:
         df = transform_df(date)
         if dates == '2018-02-27':
-            df = df[~df['time'].isin(DEL_TIME)]
+            df = df[~df['time'].isin(MISSING)]
         total_df = pd.concat([total_df, df])
     total_df = total_df.reset_index().drop(["index"], axis = 1)
 
@@ -528,14 +520,14 @@ def complete_df(dates):
 
     total_df["price_trend"] = (((total_df["price_1"] - \
                               total_df["price_2"]) < 0).astype(int) + \
-                              ((total_df["price_2"] - total_df["price_3"]) <\
-                               0).astype(int)) - (((total_df["price_1"] - \
-                               total_df["price_2"]) > 0).astype(int) + \
-                               ((total_df["price_2"] - total_df["price_3"]) >\
-                               0).astype(int))
+                              ((total_df["price_2"] - total_df["price_3"]) < \
+                              0).astype(int)) - (((total_df["price_1"] - \
+                              total_df["price_2"]) > 0).astype(int) + \
+                              ((total_df["price_2"] - total_df["price_3"]) > \
+                              0).astype(int))
 
     total_df["average_price_volatility"] = total_df["price_trend"] * \
-                                           total_df["price_volatility"] / 2 
+                                           total_df["price_volatility"] / 2
     
     for i in range(1, 4):
         minus, sell, buy = "sell_minus_buy_" + str(i), "sell_" + str(i), \
@@ -633,7 +625,6 @@ def complete_df(dates):
         total_df.set_value(index, 'kosdaq_3', KOSDAQ_NOW[row["time_3"]])
         total_df.set_value(index, 'kosdaq_answer', KOSDAQ_NOW[row["time"]])
 
-    
     total_df["kospi_trend"] = ((((total_df["kospi_3"]) - \
                               (total_df["kospi_2"] * 1+1e-3)) / \
                               ((total_df["kospi_2"]) - (total_df["kospi_1"] \
@@ -657,7 +648,7 @@ def complete_df(dates):
     
     total_df["did_opening_price_increase"] = 1
 
-    for var in TO_SQ:
+    for var in SQUARED:
         col_name = var + '_sq'
         total_df[col_name] = np.nan
         for index, row in total_df.iterrows():
