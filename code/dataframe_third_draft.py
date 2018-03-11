@@ -16,6 +16,13 @@ try:
 except FileNotFoundError as e:
     print(e)
 
+try:
+    with open("../raw_data/company_info.json", 'r', encoding='UTF-8') as f:
+        COMPANY_INFO = json.load(f)
+
+except FileNotFoundError as e:
+    print(e)
+
 
 def combine_price(date, save=False):
     '''
@@ -99,20 +106,8 @@ def combine_price(date, save=False):
     return rv
 
 
-
-with open("krx_code.json", 'r', encoding='UTF-8') as f:
-    KRX_CODE = json.load(f)
-
-with open("company_info.json", 'r', encoding='UTF-8') as f:
-    COMPANY_INFO = json.load(f)
-
 kospi = {}
 kosdaq = {}
-
-#KOSPI_DIFF
-#KOSPI_NOW
-#KOSDAQ_DIFF
-#KOSDAQ_NOW
 
 for month in range(2, 4):
     for day in range(1, 32):
@@ -121,7 +116,6 @@ for month in range(2, 4):
         for market in ("KOSPI", "KOSDAQ"):
             filename = prefix + market + "_2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
                        "-" + ("0" + str(day) if day <= 9 else str(day)) + ".json"
-        
         
             try:
                 with open(filename, 'r', encoding='UTF-8') as f:
@@ -215,7 +209,6 @@ def open_files(date):
             22, 23, 26, 27, 28, and March 2, 3, 6 ,7
     Return: dictionary, dictionary
     '''
-    
     focus_text = "../raw_data/discussion/" + date + "_focus/" +\
                  date + "_focus_group.json"
 
@@ -240,9 +233,8 @@ def get_single_time(prefix, hour, minute):
       min: integer of min, from 0 to 6
     Return: a string of path
     '''
-    
     if hour == 15 and minute > 3:
-        return 
+        return None
     else:
         rv = prefix + " " + (("0" + str(hour)) if hour <= 9 else str(hour)) \
              + ":" + str(minute) + "0.json"
@@ -259,7 +251,6 @@ def get_time_disc(date):
             21, 22, 23, 26, 27, 28, and March 2, 3, 6 ,7
     Return: a list
     '''
-    
     time = []
     prefix = date + "_focus/discussion_" + date
     month = date[6]
@@ -293,7 +284,6 @@ def get_time_disc(date):
                     continue            
                 time.append(get_single_time(prefix, hour, minute))       
     
-    
     return time
 
 
@@ -305,7 +295,6 @@ def df_list_disc(date):
       date: string of date, e.g. 2018-03-06
     Return: a list of dataframe
     '''
-
     df_list = []
     time = get_time_disc(date)
     for x in time:
@@ -336,7 +325,7 @@ def list_to_df(date, df_list, column_names, key_list):
     total = pd.DataFrame(columns=column_names)
     for ind, df in enumerate(df_list):
         
-        if ind >= cutoff:
+        if ind >= 8:
             df_total = df.merge(df_list[ind - 8], on = \
                                 key_list).merge(df_list[ind - 9], \
                                 on = key_list).merge(df_list[ind - 10], \
@@ -354,7 +343,6 @@ def get_discuss_df(date):
       date: string of date, e.g. 2018-03-06
     Return: a dataframe
     '''
-
     discussion_list = df_list_disc(date)
     discuss_df = list_to_df(date, discussion_list, COLUMN_DISC, 
                             ['name']).reset_index().drop(["index"], \
@@ -371,7 +359,6 @@ def df_list_price(date):
       date: string of date, e.g. 2018-03-06
     Return: a list
     '''
-    
     focus, price = open_files(date)
     price_df = pd.DataFrame(price, columns = ["index", "code", "name", \
                                               "time", "price", "price_dif", \
@@ -398,7 +385,6 @@ def get_price_df(date):
       date: string of date, e.g. 2018-03-06
     Return: a datafame
     '''
-
     price_df_list = df_list_price(date)
     price_df = list_to_df(date, price_df_list, COLUMN_PRICE, \
                           ['code', 'name']).reset_index().drop(["index"], axis = 1)
@@ -414,7 +400,6 @@ def get_total_df(date):
       date: string of date, e.g. 2018-03-06
     Return: a datafame
     '''
-
     price_df = get_price_df(date)
     discuss_df = get_discuss_df(date)
     total_df = pd.merge(price_df, discuss_df, on = ['name', \
@@ -433,7 +418,6 @@ def add_company(date):
       date: string of date, e.g. 2018-03-06
     Return: a dataframe
     '''
-
     total = get_total_df(date)
     total["mkt_cap"] = np.nan
     total["kospi"] = np.nan
@@ -443,15 +427,15 @@ def add_company(date):
     for index, row in total.iterrows():
         mkt_cap = MKT_CAP[row["code"]]
 
-        kospi = 1 if row["code"] in KOSPI else 0
+        kospi_dummy = 1 if row["code"] in KOSPI else 0
 
-        kosdaq = 1 if row["code"] in KOSDAQ else 0
+        kosdaq_dummy = 1 if row["code"] in KOSDAQ else 0
 
         trash = 1 if row["code"] in TRASH else 0
 
         total.set_value(index,"mkt_cap", mkt_cap)
-        total.set_value(index,"kospi", kospi)
-        total.set_value(index,"kosdaq", kosdaq)
+        total.set_value(index,"kospi", kospi_dummy)
+        total.set_value(index,"kosdaq", kosdaq_dummy)
         total.set_value(index,"trash", trash)  
     
     return total
@@ -464,7 +448,6 @@ def transform_df(date):
       date: string of date, e.g. 2018-03-06
     Return: a dataframe
     '''
-
     total = add_company(date)
     total.dropna(inplace = True)
     for var in VAR_TO_TRANSFORM:
@@ -487,7 +470,6 @@ def total_date_df(dates):
       dates: list of dates, e.g. ['2018-02-28', '2018-03-02']
     Return: a dataframe
     '''
-    
     total_df = pd.DataFrame(columns=COLUMN_TOTAL)
     for date in dates:
         df = transform_df(date)
@@ -506,7 +488,6 @@ def complete_df(dates):
       dates: a list of dates to mark the data
     Return: a dataframe     
     '''
-    
     total_df = total_date_df(dates)
     total_df["yesterday_closing_price"] = total_df["price_1"] - \
                                           total_df["price_dif_1"]
@@ -597,10 +578,10 @@ def complete_df(dates):
     num = 1
     time_list = []
     for index, row in total_df.iterrows():
-        pi_ind = KOSPI_DIFF[row['time']]
-        daq_ind = KOSDAQ_DIFF[row['time']]
-        total_df.set_value(index,'kospi_ind', pi_ind)
-        total_df.set_value(index,'kosdaq_ind', daq_ind)
+        kospi_ind = kospi[row['time']]
+        kosdaq_ind = kosdaq[row['time']]
+        total_df.set_value(index,'kospi_ind', kospi_ind)
+        total_df.set_value(index,'kosdaq_ind', kosdaq_ind)
         time = row['time'].split()[1]
         if time not in time_list:
             time_list.append(time)
@@ -617,7 +598,7 @@ def complete_df(dates):
 
         late = 1 if (num >= 31) and (num <= 36) else 0
 
-        mkt_change = row['kospi'] * pi_ind + row['kosdaq'] * daq_ind
+        mkt_change = row['kospi'] * kospi_ind + row['kosdaq'] * kosdaq_ind
         total_df.set_value(index,'mkt_change', mkt_change)
         total_df.set_value(index,'early_mor', early_mor)
         total_df.set_value(index,'morning', morning)
@@ -625,21 +606,24 @@ def complete_df(dates):
         total_df.set_value(index,'afternoon', afternoon)
         total_df.set_value(index,'late', late)
         total_df.set_value(index,'time_slot', num)
-        total_df.set_value(index,'ko_inter', pi_ind * daq_ind)
+        total_df.set_value(index,'ko_inter', kospi_ind * kosdaq_ind)
         per_now = 100 * row['price_dif_3']/row['yesterday_closing_price']
         total_df.set_value(index, 'per_now', per_now)
         alpha = per_now - mkt_change
         total_df.set_value(index, 'alpha', alpha)
         
-        total_df.set_value(index, 'kospi_1', KOSPI_NOW[row["time_1"]])
-        total_df.set_value(index, 'kospi_2', KOSPI_NOW[row["time_2"]])
-        total_df.set_value(index, 'kospi_3', KOSPI_NOW[row["time_3"]])
-        total_df.set_value(index, 'kospi_answer', KOSPI_NOW[row["time"]])
+        #(kospi["2018-02-21 09:20"] / kospi["2018-02-21 last_closing"] - 1) * 100
+        last_closing = row["time"][:10] + " last_closing"
+        
+        total_df.set_value(index, 'kospi_1', (kospi[row["time_1"]] / kospi[last_closing] - 1) * 100)
+        total_df.set_value(index, 'kospi_2', (kospi[row["time_2"]] / kospi[last_closing] - 1) * 100)
+        total_df.set_value(index, 'kospi_3', (kospi[row["time_3"]] / kospi[last_closing] - 1) * 100)
+        total_df.set_value(index, 'kospi_answer', kospi[row["time"]])
      
-        total_df.set_value(index, 'kosdaq_1', KOSDAQ_NOW[row["time_1"]])
-        total_df.set_value(index, 'kosdaq_2', KOSDAQ_NOW[row["time_2"]])
-        total_df.set_value(index, 'kosdaq_3', KOSDAQ_NOW[row["time_3"]])
-        total_df.set_value(index, 'kosdaq_answer', KOSDAQ_NOW[row["time"]])
+        total_df.set_value(index, 'kosdaq_1', (kosdaq[row["time_1"]] / kosdaq[last_closing] - 1) * 100)
+        total_df.set_value(index, 'kosdaq_2', (kosdaq[row["time_2"]] / kosdaq[last_closing] - 1) * 100)
+        total_df.set_value(index, 'kosdaq_3', (kosdaq[row["time_3"]] / kosdaq[last_closing] - 1) * 100)
+        total_df.set_value(index, 'kosdaq_answer', kosdaq[row["time"]])
 
     total_df["kospi_trend"] = ((((total_df["kospi_3"]) - \
                               (total_df["kospi_2"] * 1+1e-3)) / \
