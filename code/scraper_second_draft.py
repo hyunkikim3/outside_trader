@@ -19,7 +19,6 @@ def save_krx_code():
     '''
     Direct copy
     '''
-
     code_df = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?\
                             method=download&searchType=13', header=0)[0]
     code_df.종목코드 = code_df.종목코드.map('{:06d}'.format)
@@ -44,7 +43,6 @@ def scrape_company_info(code):
       code: string of stock code, e.g. '035720'
     Retun: a dictionary
     '''
-
     target = "http://finance.naver.com/item/coinfo.nhn?code=" + code + "#"
     pm = urllib3.PoolManager()
     html = pm.urlopen(url=target, method="GET").data
@@ -66,7 +64,9 @@ def scrape_company_info(code):
 
 
 def save_company_info():
-    
+    '''
+    header comment
+    '''
     company_df = pd.DataFrame(list(KRX_CODE.items()), 
                  columns=['name', 'code'])
 
@@ -130,7 +130,6 @@ def scrape_5day_high_low(code):
       code: string of stock
     Return: a tuple
     '''
-
     target = "http://finance.naver.com/item/sise_day.nhn?code=" + code + \
              "&page=1"
     pm = urllib3.PoolManager()
@@ -154,7 +153,6 @@ def scrape_5day_high_low(code):
 def filter_focus_group(date, save=False):
     '''
     input = "2018-03-07"
-
     '''
     time = []
 
@@ -226,7 +224,6 @@ def scrape_discussion(code):
       code: string of stock code, e.g. '035720'
     Return: a dictionary
     '''
-
     page_num = 1
     post_dic = {}
     post_num = 0
@@ -273,7 +270,19 @@ def scrape_discussion(code):
     return post_dic
 
 
-def save_discussion(focus_group):
+def save_discussion(date):
+    '''
+    header comment
+    '''
+
+    try:
+        with open("../raw_data/discussion/" + date + "_focus/" + date \
+                  + "_focus_group.json", "r", encoding="UTF-8") as focus:
+            focus_group = json.load(focus)
+    
+    except:
+        print("Error Occured")
+        return None
 
     rv = []
 
@@ -303,7 +312,6 @@ def filter_opening_increase(date, save=False):
       date: string, e.g. '2018-03-08'
     Return: boolean
     '''
-
     try:
         with open("../raw_data/discussion/" + date + "_focus/" + date \
                   + "_focus_group.json", "r", encoding="UTF-8") as focus:
@@ -347,7 +355,6 @@ def scrape_price_history(code, time):
       time: the string of date 201802280901
     Return: a dictionary
     '''
-
     target = "http://finance.naver.com/item/sise_time.nhn?code=" + code + \
              "&thistime=" + time + "01&page=1"
     pm = urllib3.PoolManager()
@@ -376,7 +383,6 @@ def scrape_market_history(date, save=False):
     '''
     Get market price index for
     '''
-
     time = []
     for i in range(9,16):
         i = str("0") + str(i) if i < 10 else str(i)
