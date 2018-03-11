@@ -1,4 +1,4 @@
-#run this file and can get json file for prediction for bese logistic
+#run this file and can get json file for prediction for logistic
 #model inside a json file
 import pandas as pd
 import numpy as np
