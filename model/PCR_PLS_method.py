@@ -362,7 +362,7 @@ class PLS_mod:
 
     
     #"MODIFIED"
-    def get_prediction(self, num, x_train, y_train, x_test, y_test):
+    def get_prediction(self, num, x_train, y_train, x_test):
         '''
         Get the prediction based from the training set and testing set
 
@@ -371,7 +371,6 @@ class PLS_mod:
           x_train: dataframe, the data for x training set
           y_train: series, the data for x training set
           x_test: dataframe, the data for x testing set
-          y_test: series, the data for x testing set
 
         Return: series
         '''
@@ -427,7 +426,7 @@ class PLS_mod:
 
         return y_port.shape[0], y_port.mean()
 
-'''
+
 #write pls prediction to json file, you can hardcode number of principal
 #component by using get_prediction function
 PLS = PLS_mod(10, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
@@ -435,7 +434,7 @@ y_pred_pls = PLS.y_pred
 PLS_mod = pd.DataFrame(y_pred_pls, columns = ['PLS'])
 PLS_mod['PLS'] = (PLS_mod['PLS'] >= 0.5).astype(int)
 PLS_mod.to_json('PLS_mod.json', orient='values')
-'''
+
 
 
 
