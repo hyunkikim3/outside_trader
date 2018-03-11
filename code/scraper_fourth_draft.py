@@ -459,3 +459,100 @@ def scrape_market_history(date, save=False):
                     json.dump(kosdaq, f, ensure_ascii=False)
 
     return (kospi, kosdaq)
+
+
+def scrape_price_history(code, time):
+    '''
+    Scrape the history price information and store it inside a dictionary
+    of the given stock in the given date and time(hour and minute. It cannot 
+    scrape information more than ten days before, as long as it's a weekday.
+    Input: 
+      code: the string of stock code
+      time: the string of date 201802280901
+    Return: a dictionary
+    '''
+    target = "http://finance.naver.com/item/sise_time.nhn?code=" + code + \
+             "&thistime=" + time + "01&page=1"
+    pm = urllib3.PoolManager()
+    html = pm.urlopen(url=target, method="GET").data
+    soup = bs4.BeautifulSoup(html, 'lxml')
+    data_list = soup.find_all("tr")[2].find_all("td",class_="num")
+    data_dic = {}
+    data_dic["price"] = data_list[0].text
+    image = data_list[1].find("img")
+    if image != None:
+        if image["alt"] == "상승":
+            data_dic["price_dif"] = data_list[1].text.strip("\n\t")
+        else:
+            data_dic["price_dif"] = "-" + data_list[1].text.strip("\n\t")
+    else:
+        data_dic["price_dif"] = 0
+    data_dic["sell"] = data_list[2].text
+    data_dic["buy"] = data_list[3].text
+    data_dic["volume"] = data_list[4].text
+    data_dic["variation"] = data_list[5].text
+    
+    return data_dic
+
+
+def save_price(date):
+    '''
+    header comment
+    '''
+    opening_increase = "../raw_data/price/" + date + "_price/" + date +\
+                            "_opening_increase.json"
+    
+    try:
+        with open(opening_increase, 'r', encoding='UTF-8') as f:
+            increased = json.load(f)
+    
+    except FileNotFoundError as e:
+        print(e)
+        return None
+    
+    time = []
+    for hour in range(9,16):
+        for minute in range(0, 6):
+            if hour != 15 or minute < 4:
+                time.append("../raw_data/discussion/" + date + \
+                "_focus/discussion_" + date + "-" + (("0" + str(hour)) \
+                if hour <= 9 else str(hour))+ "-" + str(minute) + "0.json")
+    
+    df = pd.DataFrame(columns=["code", "name", "time", "price", "price_dif",\
+                                        "sell", "buy", "volume", "variation"])
+    
+    for t in time:
+        with open(t, 'r', encoding='UTF-8') as f:
+            discussion = json.load(f)
+        for d in discussion:
+            if d["name"] in increased:
+                row = pd.DataFrame(columns=["code", "name", "time", "price", "price_dif",\
+                                            "sell", "buy", "volume", "variation"],\
+                               data = [[KRX_CODE[d["name"]], d["name"], d["time"], np.nan, np.nan,\
+                                       np.nan, np.nan, np.nan, np.nan]])
+                df = df.append(row)
+    
+    df = df.reset_index()
+    
+    for idx, row in df.iterrows():
+        timestamp = row["time"]
+        t = re.sub('[ :-]', '', timestamp)
+
+        d = scrape_price_history(row["code"], t)
+
+        df["price"].iloc[idx] = d["price"]
+        df["price_dif"].iloc[idx] = d["price_dif"]
+        df["sell"].iloc[idx] = d["sell"]
+        df["buy"].iloc[idx] = d["buy"]
+        df["volume"].iloc[idx] = d["volume"]
+        df["variation"].iloc[idx] = d["variation"]
+    
+    rv = []
+    rv.append(df.columns.tolist())
+    for row in df.iterrows():
+        rv.append(row[1].tolist())
+    
+    with open(date + "_price.json","w", encoding='UTF-8') as f:
+        json.dump(rv, f, ensure_ascii=False)
+
+    return rv
