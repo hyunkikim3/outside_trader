@@ -130,7 +130,10 @@ class KNN_mod:
           best_n: integer, the number of neighbours to get minimum error rate 
                   for y = 1 comparing training set and validation set
           min_error: float, the minimum error rate mentioned above
-          y_pred: series, best prediction made based on all given attributes 
+          y_pred: series, best prediction made based on all given attributes
+          confusion_matrix: numpy array, the confusion matrix for y_pred and 
+                            y_test
+          report: string, the classification report 
           prot_shape: integer, the size of portfolio predicted from testing 
                       set
           exp_rv: float, the expected percentage increase from the portfolio
