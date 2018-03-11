@@ -170,9 +170,9 @@ class KNN_mod:
         Input:
           num: integer, from 1 to 100
           x_train: dataframe, the data for x training set
-          y_train: series, the data for x training set
+          y_train: series, the data for y training set
           x_valid: dataframe, the data for x validation set
-          y_valid: series, the data for x validation set
+          y_valid: series, the data for y validation set
 
         Return: float
         '''
