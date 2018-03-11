@@ -282,7 +282,7 @@ class PCR_mod:
 
 #write pcr prediction to json file, you can harcode y_pred
 #by using get_prediction function and setting differnt number of pc
-#hardcode k_fold to 2
+#hardcode k_fold to 2, k_fold should be larger than 2
 PCR = PCR_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
 y_pred_pcr = PCR.y_pred
 PCR_mod = pd.DataFrame(y_pred_pcr, columns = ['PCR'])
@@ -430,7 +430,7 @@ class PLS_mod:
 
 #write pls prediction to json file, you can hardcode number of principal
 #component by using get_prediction function
-#harcode to k_fold =2
+#harcode to k_fold =2, it should be larger than 2
 PLS = PLS_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
 y_pred_pls = PLS.y_pred
 PLS_mod = pd.DataFrame(y_pred_pls, columns = ['PLS'])
