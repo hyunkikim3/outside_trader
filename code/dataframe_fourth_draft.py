@@ -463,3 +463,23 @@ def complete_dataframe(dates):
             total_df.set_value(index, col_name, sqr)
 
     return total_df
+
+
+def save_monthly_dataframe(month):
+    trading = []
+    for day in range(1,32):
+        date = "2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
+               "-" + ("0" + str(day) if day <= 9 else str(day))
+        path = "../raw_data/discussion/" + date + "_focus/" + date + "_focus_group.json"
+
+        try:
+            with open(path, "r", encoding="UTF-8"):
+                trading.append(date)
+
+        except FileNotFoundError:
+            continue
+
+    df = complete_dataframe(focus)
+    df.to_json("dataframe" + ("0" + str(month) if month <= 9 else str(month)) + ".json", orient='values')
+    
+    return df
