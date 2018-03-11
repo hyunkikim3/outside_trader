@@ -252,7 +252,7 @@ class RandomForest_mod:
         ranks = np.argsort(importances)[::-1] 
         for f in range(x_train.shape[1]):
             rank_list.append((f + 1, features[ranks[f]], \
-                              importances[rank[f]]))
+                              importances[ranks[f]]))
         
         return rank_list
 
@@ -390,6 +390,7 @@ class BAGGING_mod:
         '''
 
         min_error = 1
+        f_num = 1
         if (min_num < max_num) and (max_num < x_train.shape[0]):
             for i in range(min_num, max_num + 1):
                 bag_tree = BaggingClassifier(n_estimators = 500, \
