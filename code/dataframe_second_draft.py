@@ -106,17 +106,34 @@ with open("krx_code.json", 'r', encoding='UTF-8') as f:
 with open("company_info.json", 'r', encoding='UTF-8') as f:
     COMPANY_INFO = json.load(f)
 
-with open('KOSPI_Feb14_Mar07.json', 'r', encoding='UTF-8') as f:
-    KOSPI_DIFF = json.load(f)
+kospi = {}
+kosdaq = {}
 
-with open('KOSDAQ_Feb14_Mar07.json', 'r', encoding='UTF-8') as f:
-    KOSDAQ_DIFF = json.load(f)
+#KOSPI_DIFF
+#KOSPI_NOW
+#KOSDAQ_DIFF
+#KOSDAQ_NOW
 
-with open('kospi_now_Feb14_Mar07.json', 'r', encoding='UTF-8') as f:
-    KOSPI_NOW = json.load(f)
+for month in range(2, 4):
+    for day in range(1, 32):
+        prefix = "../raw_data/market/2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
+                   "-" + ("0" + str(day) if day <= 9 else str(day)) + "_market/"
+        for market in ("KOSPI", "KOSDAQ"):
+            filename = prefix + market + "_2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
+                       "-" + ("0" + str(day) if day <= 9 else str(day)) + ".json"
+        
+        
+            try:
+                with open(filename, 'r', encoding='UTF-8') as f:
+                    opened = json.load(f)
+                    
+                    if market == "KOSPI":
+                        kospi.update(opened)
+                    else:
+                        kosdaq.update(opened)
 
-with open('kosdaq_now_Feb14_Mar07.json', 'r', encoding='UTF-8') as f:
-    KOSDAQ_NOW = json.load(f)
+            except FileNotFoundError:
+                continue
 
 
 company_df = pd.DataFrame(COMPANY_INFO, columns = ["name", "code", \
@@ -268,7 +285,7 @@ def get_time_disc(date):
             elif day == "02" and hour == 10:
                 continue        
             elif day == "02" and hour == 15:
-               continue            
+                continue            
             for minute in range(0, 6):
                 if day == "02" and hour == 11 and minute < 5:
                     continue            
@@ -330,7 +347,6 @@ def list_to_df(date, df_list, column_names, key_list):
     return total 
 
 
-# final version only need 'high' for list to df
 def get_discuss_df(date):
     '''
     Get total dataframe of discussion from raw files
