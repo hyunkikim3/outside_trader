@@ -229,7 +229,7 @@ for method in ["AVG"] + METHOD:
     draw_result(method)
 
 
-with open('../balance/model_df_weiwei_0307_final.json', 'r', encoding='UTF-8') as f:
+with open('../balance/model_df_final.json', 'r', encoding='UTF-8') as f:
     MODEL = json.load(f)
 
 COL = ['index', 'name', 'code', 'time', 'price', 'time_1', 'price_1', \
