@@ -291,8 +291,7 @@ def complete_dataframe(dates):
     total_df = pd.DataFrame(columns=COLUMN_TOTAL)
     for date in dates:
         df = daily_dataframe(date)
-        if date == '2018-02-27':
-            df = df[~df['time'].isin(MISSING)]
+        df = df[~df['time'].isin(MISSING)]
         total_df = pd.concat([total_df, df])
     total_df = total_df.reset_index().drop(["index"], axis = 1)
     
