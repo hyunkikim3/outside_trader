@@ -136,18 +136,17 @@ def scrape_5day_high_low(code):
     html = pm.urlopen(url=target, method="GET").data
     soup = bs4.BeautifulSoup(html, 'lxml')
     data_list = soup.find_all("tr")[2:7]
-    high_list = []
-    low_list = []
+    rv = []
     for data in data_list:
         new_list = data.find_all("td",class_="num")
         high = new_list[3].text.split(",")
         high = "".join(high)
         low = new_list[4].text.split(",")
         low = "".join(low)
-        high_list.append(high)
-        low_list.append(low)
+        rv.append(high)
+        rv.append(low)
     
-    return max(high_list), min(low_list)
+    return max(rv), min(rv)
 
 
 def filter_focus_group(date, save=False):
