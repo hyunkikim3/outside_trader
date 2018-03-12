@@ -459,8 +459,6 @@ def complete_dataframe(dates):
             sqr = row[var] ** 2
             total_df.set_value(index, col_name, sqr)
     
-    total_df = total_df.dropna(how="any")
-
     return total_df
 
 
@@ -478,7 +476,7 @@ def save_monthly_dataframe(month):
         except FileNotFoundError:
             continue
 
-    df = complete_dataframe(focus)
-    df.to_json("dataframe" + ("0" + str(month) if month <= 9 else str(month)) + ".json", orient='values')
+    df = complete_dataframe(trading)
+    df.to_json("dataframe_" + ("0" + str(month) if month <= 9 else str(month)) + ".json", orient='values')
     
     return df
