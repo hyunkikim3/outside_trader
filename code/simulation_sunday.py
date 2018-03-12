@@ -3,7 +3,7 @@ import pandas as pd
 import json
 import matplotlib.pyplot as plt
 
-with open('../balance/model_df_final.json', 'r', encoding='UTF-8') as f:
+with open('../to_do/balance/model_df_final.json', 'r', encoding='UTF-8') as f:
     MODEL = json.load(f)
 
 METHOD = ['KNN', 'PLS', 'Logistic', 'Random Forest', 'Bagging', 'Boosting', 'PCR', 'Tree']
@@ -48,31 +48,7 @@ COL = ['index', 'name', 'code', 'time', 'price', 'time_1', 'price_1', \
        'kosdaq_trend_sq', 'KNN', 'PLS', 'Logistic', 'Random Forest', \
        'Bagging', 'Boosting', 'PCR', 'Tree']
 
-
-def get_group_by(data):
-    '''
-    Create a dataframe with calculating kospi and kosdaq market balance by 
-    each time slot out of the given raw data for total result dataframe with
-    infor of each x variables and y variables for different models. Return
-    a dataframe created from raw data and a market index data frame grouped
-    by time.
-    Input: 
-      data: data from a json file
-    Return: a dataframe, dataframe
-    '''
-    
-    df = pd.DataFrame(data, columns=COL)
-    gb = pd.DataFrame(df.groupby("time")[["kospi_answer", \
-                      "kosdaq_answer"]].mean())
-    init = gb[0:1]
-    init = init.set_index([["2018-02-27 12:50"]])
-    init["kospi_answer"] = 2468.26
-    init["kosdaq_answer"] = 877.25
-    gb = pd.concat([init, gb[180:]])
-
-    return df, gb
-
-def simulate(data, var_list):
+def simulate(data, var_list, starting):
     '''
     Calculate balance for each model out from the data passed and create a 
     balance dataframe for the list of columns passed which only has columns 
@@ -80,15 +56,25 @@ def simulate(data, var_list):
     Input:
       df: a dataframe passed to calculate
       var_list: the list of model column names, e.g. ['KNN', 'PLS']
+      starting: string, e.g. "2018-02-27 12:50"
     Return: a dataframe
-    '''    
-
-    df, gb = get_group_by(data)
+    '''
+    predicting = starting[:-5] + str(int(starting[-5:-3]) + 1) + starting[-3:]
+    
+    df = pd.DataFrame(data, columns=COL)
+    gb = pd.DataFrame(df.groupby("time")[["kospi_answer", \
+                      "kosdaq_answer"]].mean())
+    init = gb[0:1]
+    init = init.set_index([[starting]])
+    init["kospi_answer"] = df[df["time_3"] == starting].iloc[0]["kospi_3"]
+    init["kosdaq_answer"] = df[df["time_3"] == starting].iloc[0]["kosdaq_3"]
+    gb = pd.concat([init, gb[gb.reset_index()[gb.reset_index()["time"] == predicting].index.tolist()[0]:]])
+    
     for var in var_list:
         gb[var + "_increase"] = 1 + (df[df[var] == 1\
                                     ].groupby("time")["price_increase"].mean())/100
         gb[var + "_balance"] = np.nan
-        gb[var + "_balance"].loc["2018-02-27 12:50"] = 100
+        gb[var + "_balance"].loc[starting] = 100
 
         c = 0
         for t, row in gb.iterrows():
@@ -128,13 +114,13 @@ def simulate(data, var_list):
 
     return result
 
-balance = simulate(MODEL, METHOD)
+balance = simulate(MODEL, METHOD, "2018-02-27 12:50")
 #balance.to_json('balance_Feb27_Mar07_final.json', orient='values')
 
-with open('../balance/balance_Feb27_Mar07_final.json', 'r', encoding='UTF-8') as f:
+with open('../to_do/balance/balance_Feb27_Mar07_final.json', 'r', encoding='UTF-8') as f:
     BALANCE = json.load(f)
 
-with open('../balance/model_df_final.json', 'r', encoding='UTF-8') as f:
+with open('../to_do/balance/model_df_final.json', 'r', encoding='UTF-8') as f:
     MODEL = json.load(f)
 
 COL = ['index', 'name', 'code', 'time', 'price', 'time_1', 'price_1', \
@@ -186,7 +172,6 @@ TOTAL = pd.DataFrame(MODEL, columns=COL)
 RESULT = pd.DataFrame(BALANCE, columns=BALANCE_COL)
 TESTING = TOTAL[11629:]
 
-
 def draw_result(model):
     '''
     Draw graph and print results of the specific model and market result.
@@ -195,8 +180,6 @@ def draw_result(model):
              indices
     Return:
     '''
-    
-  
     if model == 'AVG':
         df = pd.DataFrame({'x': range(0, 146), \
                            'y1': RESULT["KOSPI_balance"], \
@@ -223,13 +206,12 @@ def draw_result(model):
            sub_df["did_price_033"].mean())
     print("Expected return:", sub_df["price_increase"].mean())
     
-    return
+    return None
 
 for method in ["AVG"] + METHOD:
     draw_result(method)
 
-
-with open('../balance/model_df_final.json', 'r', encoding='UTF-8') as f:
+with open('../to_do/balance/model_df_final.json', 'r', encoding='UTF-8') as f:
     MODEL = json.load(f)
 
 COL = ['index', 'name', 'code', 'time', 'price', 'time_1', 'price_1', \
