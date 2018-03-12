@@ -8,7 +8,7 @@ from datetime import datetime, tzinfo, timedelta
 from pytz import timezone
 
 try:
-    with open("../raw_data/krx_code.json", "r", encoding="UTF-8") as krx:
+    with open("../data/krx_code.json", "r", encoding="UTF-8") as krx:
         KRX_CODE = json.load(krx)
 
 except FileNotFoundError as e:
