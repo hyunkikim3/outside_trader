@@ -142,7 +142,7 @@ def get_price(date):
       date: string of date, e.g. 2018-03-06
     Return: a datafame
     '''
-    price_text = "../raw_data/price/" + date + "_price/" +\
+    price_text = "../data/price/" + date + "_price/" +\
                  date + "_price.json"
     
     with open(price_text, 'r', encoding='UTF-8') as f:
@@ -179,7 +179,7 @@ def get_discussion(date):
     df_list = []
     
     time = []
-    prefix = "../raw_data/discussion/" + date + "_focus/discussion_" + date
+    prefix = "../data/discussion/" + date + "_focus/discussion_" + date
     month = date[6]
     day = date[8:]
     if month == "2":
@@ -470,7 +470,7 @@ def save_monthly_dataframe(month):
     for day in range(1,32):
         date = "2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
                "-" + ("0" + str(day) if day <= 9 else str(day))
-        path = "../raw_data/discussion/" + date + "_focus/" + date + "_focus_group.json"
+        path = "../data/discussion/" + date + "_focus/" + date + "_focus_group.json"
 
         try:
             with open(path, "r", encoding="UTF-8"):
