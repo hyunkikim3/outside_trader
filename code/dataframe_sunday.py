@@ -353,12 +353,12 @@ def complete_dataframe(dates):
     
     disc_trend = ["volume", "post_num", "unique_id", "click"]
     for var in disc_trend:
-        r_var = var + "_trend"
+        var_trend = var + "_trend"
         var_3, var_2, var_1 = var + "_3", var + "_2", var + "_1"
-        total_df[r_var] = ((((total_df[var_3]) - \
-                            (total_df[var_2] * 1+1e-3)) / \
-                            ((total_df[var_2]) - (total_df[var_1] * \
-                            1-1e-4))) - 1) * 100
+        total_df[var_trend] = ((((total_df[var_3]) - \
+                              (total_df[var_2] * 1+1e-3)) / \
+                              ((total_df[var_2]) - (total_df[var_1] * \
+                              1-1e-4))) - 1) * 100
 
     total_df["price_increase"] = ((total_df["price"] / total_df["price_3"]) \
                                    - 1) * 100
