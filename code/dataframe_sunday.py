@@ -4,14 +4,14 @@ import re
 import json
 
 try:
-    with open("../raw_data/krx_code.json", "r", encoding="UTF-8") as f:
+    with open("../data/krx_code.json", "r", encoding="UTF-8") as f:
         KRX_CODE = json.load(f)
 
 except FileNotFoundError as e:
     print(e)
 
 try:
-    with open("../raw_data/company_info.json", 'r', encoding='UTF-8') as f:
+    with open("../data/company_info.json", 'r', encoding='UTF-8') as f:
         COMPANY_INFO = json.load(f)
 
 except FileNotFoundError as e:
@@ -21,7 +21,7 @@ kospi = {}
 kosdaq = {}
 for month in range(2, 4):
     for day in range(1, 32):
-        prefix = "../raw_data/market/2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
+        prefix = "../data/market/2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
                    "-" + ("0" + str(day) if day <= 9 else str(day)) + "_market/"
         for market in ("KOSPI", "KOSDAQ"):
             filename = prefix + market + "_2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
