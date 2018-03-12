@@ -6,14 +6,12 @@ import json
 try:
     with open("../data/krx_code.json", "r", encoding="UTF-8") as f:
         KRX_CODE = json.load(f)
-
 except FileNotFoundError as e:
     print(e)
 
 try:
     with open("../data/company_info.json", 'r', encoding='UTF-8') as f:
         COMPANY_INFO = json.load(f)
-
 except FileNotFoundError as e:
     print(e)
     
