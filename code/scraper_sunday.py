@@ -149,7 +149,7 @@ def scrape_5day_high_low(code):
     return max(price), min(price)
 
 
-def filter_focus_group(date, save=False):
+def filter_quiet_stock(date, save=False):
     '''
     input = "2018-03-07"
     '''
@@ -273,7 +273,6 @@ def save_discussion(date):
     '''
     header comment
     '''
-
     try:
         with open("../data/discussion/" + date + "_focus/" + date \
                   + "_focus_group.json", "r", encoding="UTF-8") as focus:
@@ -302,7 +301,6 @@ def save_discussion(date):
 
 
 def filter_opening_increase(date, save=False):
-    
     '''
     Return whether a stock with given code in the specific date has 
     opening price higer than closing price. cannot get info before seven
