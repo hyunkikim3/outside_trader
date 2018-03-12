@@ -458,6 +458,8 @@ def complete_dataframe(dates):
         for index, row in total_df.iterrows():
             sqr = row[var] ** 2
             total_df.set_value(index, col_name, sqr)
+    
+    total_df = total_df.dropna(how="any")
 
     return total_df
 
