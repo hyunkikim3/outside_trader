@@ -191,8 +191,8 @@ def filter_focus_group(date, save=False):
                         counter[v] = 1
                     else:
                         counter[v] = counter.get(v) + 1
-        except:
-            print("Error Occured")
+        except FileNotFoundError as e:
+            print(e)
 
     rv = []
 
@@ -279,8 +279,8 @@ def save_discussion(date):
                   + "_focus_group.json", "r", encoding="UTF-8") as focus:
             focus_group = json.load(focus)
     
-    except:
-        print("Error Occured")
+    except FileNotFoundError as e:
+        print(e)
         return None
 
     rv = []
@@ -316,8 +316,8 @@ def filter_opening_increase(date, save=False):
                   + "_focus_group.json", "r", encoding="UTF-8") as focus:
             focus_group = json.load(focus)
     
-    except:
-        print("Error Occured")
+    except FileNotFoundError as e:
+        print(e)
         return None
 
     rv = []
@@ -416,8 +416,8 @@ def scrape_market_history(date, save=False):
                 index = float(tag.find("td",class_ = "number_1"\
                                       ).string.replace(",", ""))
             
-            except:
-                print("Error Occured")
+            except ValueError as e:
+                print(e)
                 return None
 
             if flag:
