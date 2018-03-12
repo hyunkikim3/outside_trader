@@ -166,7 +166,7 @@ def filter_focus_group(date, save=False):
     
     for hour in range(20,24):
         for minute in range(0, 6):
-            time.append("../raw_data/ranking/" + yesterday + "/" + yesterday + "-" + \
+            time.append("../data/ranking/" + yesterday + "/" + yesterday + "-" + \
                         (("0" + str(hour)) if hour <= 9 \
                         else str(hour)) + "-" + str(minute) + "0.json")
 
@@ -174,7 +174,7 @@ def filter_focus_group(date, save=False):
         for minute in range(0, 6):
             if hour == 0 and minute == 1:
                 continue
-            time.append("../raw_data/ranking/" + date + "/" + date + "-" + \
+            time.append("../data/ranking/" + date + "/" + date + "-" + \
                         (("0" + str(hour)) if hour <= 9 \
                         else str(hour))+ "-" + str(minute) + "0.json")
 
@@ -276,7 +276,7 @@ def save_discussion(date):
     '''
 
     try:
-        with open("../raw_data/discussion/" + date + "_focus/" + date \
+        with open("../data/discussion/" + date + "_focus/" + date \
                   + "_focus_group.json", "r", encoding="UTF-8") as focus:
             focus_group = json.load(focus)
     
@@ -313,7 +313,7 @@ def filter_opening_increase(date, save=False):
     Return: boolean
     '''
     try:
-        with open("../raw_data/discussion/" + date + "_focus/" + date \
+        with open("../data/discussion/" + date + "_focus/" + date \
                   + "_focus_group.json", "r", encoding="UTF-8") as focus:
             focus_group = json.load(focus)
     
@@ -499,7 +499,7 @@ def save_price(date):
     '''
     header comment
     '''
-    opening_increase = "../raw_data/price/" + date + "_price/" + date +\
+    opening_increase = "../data/price/" + date + "_price/" + date +\
                             "_opening_increase.json"
     
     try:
@@ -514,7 +514,7 @@ def save_price(date):
     for hour in range(9,16):
         for minute in range(0, 6):
             if hour != 15 or minute < 4:
-                time.append("../raw_data/discussion/" + date + \
+                time.append("../data/discussion/" + date + \
                 "_focus/discussion_" + date + "-" + (("0" + str(hour)) \
                 if hour <= 9 else str(hour))+ "-" + str(minute) + "0.json")
     
