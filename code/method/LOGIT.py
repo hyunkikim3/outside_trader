@@ -5,9 +5,7 @@ from sklearn.metrics import mean_squared_error, confusion_matrix, \
                             classification_report
 from sklearn.linear_model import LogisticRegression
 
-#logistic
-
-class LOGISTIC_mod:
+class LOGIT_model:
 
     def __init__(self, x_train, y_train, x_valid, y_valid, x_test, \
                  y_test, valid_in, test_in):
@@ -244,9 +242,3 @@ class LOGISTIC_mod:
         y_port = test_in[y_pred == 1]
 
         return y_port.shape[0], y_port.mean()
-
-
-logistic = LOGISTIC_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
-                        Y_TEST, VALID_IN, TEST_IN)
-logistic_mod = pd.DataFrame(logistic.y_pred, columns = ['Logistic'])
-logistic_mod.to_json('Logistic_mod.json', orient='values')
