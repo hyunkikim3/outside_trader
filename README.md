@@ -23,3 +23,37 @@ balance_Feb27_Mar07_final.json -> data/balance_report/balance_report_02-27-12-50
 model_df_weiwei_0307_final.json -> data/dataframe/combined_dataframe.json
 
 model_df_final.json -> data/dataframe/combined_dataframe.json
+
+
+
+Django
+
+We have created a Django app to display the results of models we've implemented with graphs 
+and tables. 
+
+To go on to the website:
+ * Please run Django with "source myvenv/bin/activate"
+ * Run the app locally with "python3 manage.py runserver"
+ * Open the server "http://127.0.0.1:8000/" on the website
+
+
+To load data: 
+ * To populate the data we've scraped from the web and results of models, we've written a file "load_data.py"
+   - from the shell
+   "python3 load_data.py"
+   
+   - with Django activated state (Please run Django with "source myvenv/bin/activate")
+   "python3 manage.py makemigrations main"
+   "python3 manage.py migrate"
+ 
+ 
+ To check up on data in Django:
+  * To write queries and explore models we've implemented
+  
+    - with Django activated state (Please run Django with "source myvenv/bin/activate")
+    "python3 manage.py shell"
+    
+    i.e. from main.models import MODEL_NAME
+    
+
+ 
