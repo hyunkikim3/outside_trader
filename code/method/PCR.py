@@ -19,7 +19,7 @@ class PCR_model:
         Construct a principal component logistic regression model on the 
         data passed. 
 
-        Input:
+        Attributes:
           k: integer, >=2, parameter for cross validation to calculate 
              mean square error for each principal component
           x_train: dataframe, training set for predictors
@@ -27,8 +27,6 @@ class PCR_model:
           x_test: dataframe, testing set for predictors
           y_test: series, testing set for dependent variable
           test_in: series, price percentage increase in testing set
-
-        Return:
           mse: list, the list of mean square error for each principal 
                component
           best_n: the number of component with least mean square error
