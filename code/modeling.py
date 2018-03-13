@@ -131,10 +131,10 @@ def save_model(method):
     elif method == "LOGIT":
         model = LOGIT.LOGIT_model(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                                 Y_TEST, VALID_IN, TEST_IN)
-    elif method = "RF":
+    elif method == "RF":
         model = RF.RF_model(X_TRAIN.shape[1], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
                           X_TEST, Y_TEST, TEST_IN)
-    elif method = "BAG":
+    elif method == "BAG":
         model = BAG.BAG_model(1, X_TRAIN.shape[0], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
                             X_TEST, Y_TEST, TEST_IN)
     elif method == "BST":
