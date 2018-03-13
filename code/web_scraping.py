@@ -604,7 +604,8 @@ def ranking_dictionary(target):
     for tag in raw_stock_list:
         if raw_stock_list.index(tag) % 8 not in [5, 6, 7]:
             rank = tag.find_all("td", class_ = "no")[0].text
-            name = tag.find_all("td", class_ = "no")[0].next_sibling.next_sibling.find_all("a")[0].text
+            name = tag.find_all("td", class_ = \
+                                "no")[0].next_sibling.next_sibling.find_all("a")[0].text
             stock_dict[rank] = name
             
     return stock_dict
@@ -672,10 +673,10 @@ def cron(date):
         return None
 
     sched = BlockingScheduler()
-    sched.add_job(ranking_job_function, 'cron', month='1-12', day='1-31', hour='0-23', \
-              minute='0-59/10')
-    sched.add_job(discussion_job_function, 'cron', month='1-12', day='1-31', hour='0-23', \
-                  minute='0-59/10')
+    sched.add_job(ranking_job_function, 'cron', month='1-12', day='1-31', \
+                  hour='0-23', minute='0-59/10')
+    sched.add_job(discussion_job_function, 'cron', month='1-12', day='1-31', \
+                  hour='0-23', minute='0-59/10')
     sched.start()
     
     return None
