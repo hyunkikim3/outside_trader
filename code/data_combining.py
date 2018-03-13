@@ -110,10 +110,9 @@ SQUARED = ['price_1', 'price_dif_1', 'sell_1', 'buy_1', 'volume_1', \
 
 def list_to_df(date, df_list, column_names, key_list):
     ''''
-    Transform a list of dataframes into a whole dataframe
-    we want, in each row recording information of price 
-    and discussion of each stock and the these information
-    60 minutes ago, 70 minutes ago and 80 minutes ago.    
+    Transform a list of dataframes into a whole dataframe we want, in each 
+    row recording information of price and discussion of each stock and 
+    the these information 60 minutes ago, 70 minutes ago and 80 minutes ago.    
     
     Inputs:
       date: string of date, e.g. '2018-03-06'
@@ -477,7 +476,7 @@ def complete_dataframe(dates):
 
 def save_monthly_dataframe(month):
     '''
-    Save the dataframe of the given month in json file. 
+    Save the dataframe of the given month in a json file. 
     
     Input: 
       month: integer, 2 or 3
