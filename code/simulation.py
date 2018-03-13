@@ -187,7 +187,7 @@ def draw_balance_report(model):
     return None
 
 
-def find_searching_time(method, save=False):
+def get_searching_time(method, save=False):
     '''
     method: e.g. "Tree"
     '''
