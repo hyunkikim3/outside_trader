@@ -66,7 +66,7 @@ To load data:
     
     i.e. from main.models import MODEL_NAME
     
-### student responsibiliy 
+### Students' Responsibiliy 
 * Hyun Ki Kim - method folder, backtesting.py, datacombining.py, modeling.py
 * Jessica Jee Yoon Song - website folder
 * Weiwei Zheng - method, datacombining, modeling, webscraping
