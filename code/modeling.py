@@ -137,7 +137,7 @@ def save_model(method):
         model = SVM.SVM_model(par_list, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                           Y_TEST, TEST_IN)
     elif method == "Tree":
-        model = Tree.Tree_model(6, 100, X_TEST)
+        model = Tree.Tree_model(6, 100, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST)
     else:
         print("Invalid method")
         return None
