@@ -19,7 +19,7 @@ https://github.com/JWarmenhoven/ISLR-python
 	*  method - files for running different methods on data/dataframe/combined_dataframe.json, files are imported from modeling.py
 	*  backtesting.py - calculates and draws balance from the data/dataframe/combined_dataframe.json
   *  modeling.py - import different methods to calculate predictions from the data/dataframe/comined_dataframe.json for each model
-  *  webscraping.py - different functions to scrap different data 
+  *  webscraping.py - different functions to scrap and save different data 
                 
 * data - raw data files and clean/modified data files 
 	*  balance_report - balance sample file (result) for February 27
