@@ -6,9 +6,7 @@ from sklearn.metrics import classification_report, confusion_matrix, \
 from sklearn.ensemble import RandomForestClassifier, \
                             GradientBoostingClassifier, BaggingClassifier
 
-#Random Forest
-
-class RandomForest_mod:
+class RF_model:
 
     def __init__(self, max_num, x_train, y_train, x_valid, y_valid, x_test, \
                  y_test, test_in):
@@ -202,9 +200,3 @@ class RandomForest_mod:
         y_port = test_in[y_pred == 1]
 
         return y_port.shape[0], y_port.mean()
-
-
-RF = RandomForest_mod(X_TRAIN.shape[1], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
-                      X_TEST, Y_TEST, TEST_IN)
-RF_model = pd.DataFrame(RF.y_pred, columns = ['RF'])
-RF_model.to_json('RF_mod.json', orient='values')
