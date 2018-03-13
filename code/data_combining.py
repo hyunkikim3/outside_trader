@@ -110,13 +110,17 @@ SQUARED = ['price_1', 'price_dif_1', 'sell_1', 'buy_1', 'volume_1', \
 
 def list_to_df(date, df_list, column_names, key_list):
     ''''
-    Merge the dataframes in the list in a specific date
-    into a total dataframe based on the gap of prediction.
+    Transform a list of dataframes into a whole dataframe
+    we want, in each row recording information of price 
+    and discussion of each stock and the these information
+    60 minutes ago, 70 minutes ago and 80 minutes ago.    
+    
     Inputs:
-      date: string of date, e.g. 2018-03-06
+      date: string of date, e.g. '2018-03-06'
       df_list: a list of dataframe
       column_names: list of columns
       key_list: list of columns to merge data frames
+      
     Return: a dataframe
     '''
     total = pd.DataFrame(columns=column_names)
@@ -135,10 +139,12 @@ def list_to_df(date, df_list, column_names, key_list):
 
 def get_price(date):
     '''
-    Transform all the raw price files into a data frame
+    Transform all the raw price files on a given date into a whole dataframe.
+    
     Input:
-      date: string of date, e.g. 2018-03-06
-    Return: a datafame
+      date: string of date, e.g. '2018-03-06'
+      
+    Return: a dataframe
     '''
     price_text = "../data/price/" + date + "_price/" +\
                  date + "_price.json"
@@ -169,11 +175,14 @@ def get_price(date):
 
 def get_discussion(date):
     '''
-    Get total dataframe of discussion from raw files
+    Transform all the raw price files on a given date into a whole dataframe.
+    
     Input:
-      date: string of date, e.g. 2018-03-06
+      date: string of date, e.g. '2018-03-06'
+      
     Return: a dataframe
     '''
+    
     df_list = []
     
     time = []
@@ -236,10 +245,12 @@ def get_discussion(date):
 
 def daily_dataframe(date):
     '''
-    Add company info to the dataframe created from the price and discussion
-    raw data.
+    Add company info to the whole dataframe created from the price and 
+    discussion raw data.
+    
     Input:
-      date: string of date, e.g. 2018-03-06
+      date: string of date, e.g. '2018-03-06'
+      
     Return: a dataframe
     '''
     price_df = get_price(date)
@@ -284,8 +295,10 @@ def daily_dataframe(date):
 def complete_dataframe(dates):
     '''
     Make a complete dataframe with modified variables ready for analyze.
+    
     Input:
       dates: a list of dates to mark the data
+      
     Return: a dataframe     
     '''
     total_df = pd.DataFrame(columns=COLUMN_TOTAL)
@@ -463,6 +476,14 @@ def complete_dataframe(dates):
 
 
 def save_monthly_dataframe(month):
+    '''
+    Save the dataframe of the given month in json file. 
+    
+    Input: 
+      month: integer, 2 or 3
+    
+    Return a dataframe
+    '''
     trading = []
     for day in range(1,32):
         date = "2018-" + ("0" + str(month) if month <= 9 else str(month)) +\
