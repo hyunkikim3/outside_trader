@@ -119,26 +119,26 @@ def combined_dataframe(save=False):
 
 def save_model(method):
     if method == "KNN":
-        model = KNN.KNN_mod(10, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, Y_TEST, TEST_IN)
+        model = KNN.KNN_model(10, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, Y_TEST, TEST_IN)
     elif method == "PLS":
-        model = PLS.PLS_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
+        model = PLS.PLS_model(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
     elif method == "LOGIT":
-        model = LOGIT.LOGISTIC_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
+        model = LOGIT.LOGIT_model(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                                 Y_TEST, VALID_IN, TEST_IN)
     elif method = "RF":
-        model = RF.RandomForest_mod(X_TRAIN.shape[1], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
+        model = RF.RF_model(X_TRAIN.shape[1], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
                           X_TEST, Y_TEST, TEST_IN)
     elif method = "BAG":
-        model = BAG.BAGGING_mod(1, X_TRAIN.shape[0], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
+        model = BAG.BAG_model(1, X_TRAIN.shape[0], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
                             X_TEST, Y_TEST, TEST_IN)
     elif method == "BST":
-        model = BST.BOOSTING_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
+        model = BST.BST_model(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                             Y_TEST, TEST_IN)
     elif method == "PCR":
-        model = PCR.PCR_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
+        model = PCR.PCR_model(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
     elif method == "SVM":
         par_list = [{'C': [0.01, 0.1, 1, 10, 100, 1000], 'gamma': [0.5, 1, 2, 3, 4]}]
-        model = SVM.SVM_mod(par_list, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
+        model = SVM.SVM_model(par_list, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                           Y_TEST, TEST_IN)
     else:
         print("Invalid method")
