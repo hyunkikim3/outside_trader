@@ -26,7 +26,7 @@
   
 * presentation - proposal and final presentation slides
 
-* websites - codes to run Django app and show results of different models
+* Django - codes to run Django app and show results of different models
 
 ### Django
 
@@ -62,9 +62,9 @@ To load data:
 * graphviz
     
 ### Students' Responsibiliy 
-* Hyun Ki Kim - method folder, backtesting.py, datacombining.py, modeling.py
-* Jessica Jee Yoon Song - website folder
-* Weiwei Zheng - method, datacombining, modeling, webscraping
+* Hyun Ki Kim - data_combining, backtesting
+* Jessica Jee Yoon Song - Django
+* Weiwei Zheng - web_scraping, modeling
 
 ### References
 
