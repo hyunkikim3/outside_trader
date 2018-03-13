@@ -118,6 +118,11 @@ TEST_IN = TEST_DF['price_increase']
 def save_model(method):
     '''
     choose the model to make prediction and save the prediction to a json file
+    
+    Inputs:
+      method: string, one of 'KNN', 'PLS', 'LOGIT', 'RF', 'BAG', 'BST', 'PCR', 'SVM', 'TREE'
+      
+    Return: None
     '''
     if method == "KNN":
         model = KNN.KNN_model(10, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, Y_TEST, TEST_IN)
@@ -156,6 +161,15 @@ def save_model(method):
 
 
 def get_combined_dataframe(save=False):
+    '''
+    Get a combined data frame with both data for prediction and different prediction results
+    and save it into a json file.
+    
+    Input: 
+      save: boolean, if True, save the data into a json file
+    
+    Return: a dataframe
+    '''
     
     rv = concate_monthly_dataframe()
     rv = rv.reset_index()
