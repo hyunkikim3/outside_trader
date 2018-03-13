@@ -1,4 +1,4 @@
-# CAPP 30122 Group Project, Outside Trader
+# Outside Trader
 
 ## Hyun Ki Kim, Jessica Jee Yoon Song, Weiwei Zheng
 
