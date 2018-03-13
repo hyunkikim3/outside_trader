@@ -24,7 +24,7 @@
   *  company_info.json - company data for each stock
   *  krx_code.json - maps company names to stock code
   
-* presentation - final presentation slides
+* presentation - proposal and final presentation slides
 
 * websites - codes to run Django app and show results of different models
 
