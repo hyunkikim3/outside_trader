@@ -123,16 +123,16 @@ def save_model(method):
     elif method == "PLS":
         model = PLS.PLS_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
     elif method == "Logistic":
-        model = LOGIT.LOGIT_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
+        model = LOGIT.LOGISTIC_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                                 Y_TEST, VALID_IN, TEST_IN)
     elif method = "RF":
-        model = RF.RF_mod(X_TRAIN.shape[1], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
+        model = RF.RandomForest_mod(X_TRAIN.shape[1], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
                           X_TEST, Y_TEST, TEST_IN)
     elif method = "BAGGING":
-        model = BAG.BAG_mod(1, X_TRAIN.shape[0], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
+        model = BAG.BAGGING_mod(1, X_TRAIN.shape[0], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
                             X_TEST, Y_TEST, TEST_IN)
     elif method == "BOOSTING":
-        model = BST.BST_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
+        model = BST.BOOSTING_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                             Y_TEST, TEST_IN)
     elif method == "PCR":
         model = PCR.PCR_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
