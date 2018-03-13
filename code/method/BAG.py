@@ -13,7 +13,7 @@ class BAG_model:
         '''
         Construct a random forest model on the data passed. 
 
-        Input:
+        Attributes:
           min_num: integer, minimum number of samples to draw in each estimator
           max_num: integer, maximum number of samples to draw in each estimator
           x_train: dataframe, training set for predictors
@@ -23,8 +23,6 @@ class BAG_model:
           x_test: dataframe, testing set for predictors
           y_test: series, testing set for dependent variable
           test_in: series, price percentage increase in testing set
-
-        Return:
           x_total_train: the whole 'training' set for x to get prediction 
                          combining training set and validation set
           x_total_train: the whole 'training' set for y to get prediction 
