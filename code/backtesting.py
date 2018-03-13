@@ -85,7 +85,7 @@ def get_balance_report(data, var_list=['KNN', 'PLS', 'Logistic', \
         init["kospi_answer"] = df[df["time_3"] == starting].iloc[0]["kospi_3"]
         init["kosdaq_answer"] = df[df["time_3"] == starting].iloc[0]["kosdaq_3"]
         gb = pd.concat([init, gb[gb.reset_index()[gb.reset_index()["time"] == \
-                                                  predicting].index.tolist()[0]:]])
+                                               predicting].index.tolist()[0]:]])
     
     except IndexError:
         print("Invalid starting time")
