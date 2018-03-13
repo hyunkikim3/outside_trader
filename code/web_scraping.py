@@ -6,6 +6,7 @@ import bs4
 import urllib3
 from datetime import datetime, tzinfo, timedelta
 from pytz import timezone
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 try:
     with open("../data/krx_code.json", "r", encoding="UTF-8") as krx:
@@ -582,3 +583,83 @@ def save_price(date):
         json.dump(rv, f, ensure_ascii=False)
 
     return rv
+
+
+def ranking_dictionary(target):
+    pm = urllib3.PoolManager()
+    html = pm.urlopen(url=target, method="GET").data
+    soup = bs4.BeautifulSoup(html, 'lxml')
+    div_tag = soup.find_all("div", class_ ="box_type_l")[0]
+    raw_stock_list = div_tag.find_all("tr")[2:47]
+    stock_dict = {}
+    for tag in raw_stock_list:
+        if raw_stock_list.index(tag) % 8 not in [5, 6, 7]:
+            rank = tag.find_all("td", class_ = "no")[0].text
+            name = tag.find_all("td", class_ = "no")[0].next_sibling.next_sibling.find_all("a")[0].text
+            stock_dict[rank] = name
+    return stock_dict
+
+
+def ranking_job_function():
+    import json
+    
+    rank = ranking_dictionary("http://finance.naver.com/sise/lastsearch2.nhn")
+    tz = pytz.timezone('Asia/Seoul')
+    seoul_now = datetime.now(tz)
+    
+    rank["time"] = str(seoul_now)[:16]
+    
+    json = json.dumps(rank, ensure_ascii=False)
+    f = open(str(rank["time"])+".json","w")
+    f.write(json)
+    f.close()
+    
+    return None
+
+
+def discussion_job_function():
+    '''
+    The job function to scrape discussion info of focus group
+    '''
+    import json
+    rv = []
+    tz = timezone('Asia/Seoul')
+    seoul_now = datetime.now(tz)
+    
+    for stock in FOCUS:
+        d = scrape_discussion.scrape_discussion(KRX_CODE[stock])
+        d["name"] = stock
+        d["time"] = str(seoul_now)[:16]
+        rv.append(d)
+    
+    filename = "discussion_" + str(seoul_now)[:16] + ".json"
+    with open('y.json',"w", encoding='UTF-8') as f:
+        json.dump(rv, f)
+    
+    return None
+
+
+def cron(date):
+    try:
+        with open("../data/krx_code.json", "r", encoding="UTF-8") as f:
+            krx = json.load(f)
+    except FileNotFoundError as e:
+        print(e)
+        return None
+    
+    try:
+        with open("../data/price/" + date + "_price/" +\
+                  date + "_opening_increase.json") as f:
+            focus = json.load(f)
+    except FileNotFoundError as e:
+        print(e)
+        return None
+
+    sched = BlockingScheduler()
+    sched.add_job(ranking_job_function, 'cron', month='1-12', day='1-31', hour='0-23', \
+              minute='0-59/10')
+    sched.add_job(discussion_job_function, 'cron', month='1-12', day='1-31', hour='0-23', \
+                  minute='0-59/10')
+    sched.start()
+    
+    return None
