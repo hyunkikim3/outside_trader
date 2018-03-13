@@ -58,18 +58,18 @@ X_COL = [var for var in COLUMNS if var not in TO_DEL]
 DF = concate_monthly_dataframe()
 
 #define filter for trainig set, validation test and testing set
-TIME_FILTER_TRAIN = (DF['time'].str.startswith("2018-02-21")) | \
+TIME_FILTER_TRAIN = (DF['time'].str.startswith("2018-02-14")) | \
                     (DF['time'].str.startswith("2018-02-20")) | \
-                    (DF['time'].str.startswith("2018-02-14"))
+                    (DF['time'].str.startswith("2018-02-21"))
         
 TIME_FILTER_VALID = (DF['time'].str.startswith("2018-02-22")) | \
                     (DF['time'].str.startswith("2018-02-23")) | \
                     (DF['time'].str.startswith("2018-02-26")) 
 
-TIME_FILTER_TEST = (DF['time'].str.startswith("2018-02-28")) | \
+TIME_FILTER_TEST = (DF['time'].str.startswith("2018-02-27")) | \
+                   (DF['time'].str.startswith("2018-02-28")) | \
                    (DF['time'].str.startswith("2018-03-02")) | \
                    (DF['time'].str.startswith("2018-03-05")) | \
-                   (DF['time'].str.startswith("2018-02-27")) | \
                    (DF['time'].str.startswith("2018-03-06")) | \
                    (DF['time'].str.startswith("2018-03-07"))
 
