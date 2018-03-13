@@ -56,6 +56,9 @@ TO_DEL = ['name', 'code', 'time', 'price', 'time_1', 'time_2', 'time_3', \
 X_COL = [var for var in COLUMNS if var not in TO_DEL]
 
 def concate_monthly_dataframe():
+    '''
+    combine the data from February and March into a whole dataframe
+    '''
     
     try:
         with open("../data/dataframe/dataframe_02.json", 'r', encoding='UTF-8') as f:
@@ -113,6 +116,9 @@ TEST_IN = TEST_DF['price_increase']
 
 
 def save_model(method):
+    '''
+    choose the model to make prediction and save the prediction to a json file
+    '''
     if method == "KNN":
         model = KNN.KNN_model(10, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, Y_TEST, TEST_IN)
     elif method == "PLS":
