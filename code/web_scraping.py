@@ -654,7 +654,7 @@ def discussion_job_function():
 
 def cron(date):
     '''
-    
+    Save ranking file and discussion file every 10 minute
     '''
     try:
         with open("../data/krx_code.json", "r", encoding="UTF-8") as f:
