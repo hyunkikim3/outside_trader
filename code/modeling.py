@@ -147,3 +147,30 @@ def save_model(method):
     prediction.to_json(method + "_model.json", orient='values')
     
     return None
+
+
+def get_combined_dataframe(save=False):
+    
+    rv = concate_monthly_dataframe()
+    rv = rv.reset_index()
+
+    full_name = {"LOGIT": "Logistic", "RF": "Random Forest", \
+                   "BAG": "Bagging", "BST": "Boosting"}
+
+    for method in ("KNN", "PLS", "LOGIT", "RF", "BAG", "BST", "PCR", "Tree"):
+
+        try:
+            with open("../data/model/" + method + "_model.json", 'r', encoding='UTF-8') as f:
+                model = json.load(f)
+        except FileNotFoundError as e:
+            print(e)
+
+        name = full_name[method] if full_name.get(method) != None else method
+
+        rv[name] = pd.Series(model, index=range(rv[rv["time"].str.startswith("2018-02-27"\
+                                                )].iloc[0]["index"], rv.shape[0]))
+
+    if save:
+        rv.to_json("combined_dataframe.json", orient='values')
+
+    return rv
