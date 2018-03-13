@@ -17,7 +17,10 @@ except FileNotFoundError as e:
 
 def save_krx_code():
     '''
-    Direct copy
+    Direct copy form http://excelsior-cjh.tistory.com/entry/5-Pandas를-이용한-Naver금융에서-주식데이터-가져오기
+    
+    save the table into file mapping different stock names and stock codes 
+    (It takes more than 30 minutes to finish running)
     '''
     code_df = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?\
                             method=download&searchType=13', header=0)[0]
@@ -39,8 +42,10 @@ def scrape_company_info(code):
     '''
     Scrape company size info of the stocks with given code and store the
     info in a dictionary
+    
     Input: 
       code: string of stock code, e.g. '035720'
+      
     Retun: a dictionary
     '''
     target = "http://finance.naver.com/item/coinfo.nhn?code=" + code + "#"
@@ -65,7 +70,8 @@ def scrape_company_info(code):
 
 def save_company_info():
     '''
-    header comment
+    save the dictionary mappping different stock codes to company 
+    names to json file
     '''
     company_df = pd.DataFrame(list(KRX_CODE.items()), 
                  columns=['name', 'code'])
@@ -88,7 +94,11 @@ def scrape_ranking(save=False):
     '''
     scrape the real time search ranking table and store the ranking
     and stock name in a dictionary.
-    Input
+    
+    Input:
+      save: boolean, default = False, if true save the ranking 
+             dictionary into a file
+    
     Return
     '''
     pm = urllib3.PoolManager()
@@ -124,10 +134,12 @@ def scrape_ranking(save=False):
 
 def scrape_5day_high_low(code):
     '''
-    scrape the tuple of the maximum and minimum of a stock today
-    and save them as a tuple.
+    scrape the the maximum and minimum of a stock in th previous 
+    five trading days and save them as a tuple.
+    
     Input: 
-      code: string of stock
+      code: string of stock, e.g. '035720'
+      
     Return: a tuple
     '''
     target = "http://finance.naver.com/item/sise_day.nhn?code=" + code + \
@@ -151,7 +163,16 @@ def scrape_5day_high_low(code):
 
 def filter_quiet_stock(date, save=False):
     '''
-    input = "2018-03-07"
+    Filter and only save the stocks in the ranking table file 
+    of the given date which appear only once in ranking overnight 
+    price volatility are less than 50 percent in five days. Return
+    them in a list. 
+    
+    Input: 
+      date: string of date, e.g. "2018-03-07", korea work days only
+      save: boolean, True if save the ranking table in a new file
+    
+    Return: a list
     '''
     time = []
 
@@ -215,12 +236,14 @@ def filter_quiet_stock(date, save=False):
 
 def scrape_discussion(code):
     '''
-    scrape the real time discussion forum information (post_num, unique_id, \
-    click, like, dislike) of a stock with given stock code from the day \
-    before (current time 2018-2-14 15:00 then scrape cumulative info from \
-    2018-2-13 00:00 to now) and save it inside a dictionary.
+    scrape the real time discussion forum information (post_num, unique_id, 
+    click, like, dislike) of stock of given stock code from the day before 
+    till the moment(current time 2018-2-14 15:00 then scrape cumulative info 
+    from 2018-2-13 00:00 to now) and save it inside a dictionary.
+    
     Input:
       code: string of stock code, e.g. '035720'
+      
     Return: a dictionary
     '''
     page_num = 1
@@ -266,13 +289,22 @@ def scrape_discussion(code):
                     return post_dic
 
         page_num += 1
+        
     return post_dic
 
 
 def save_discussion(date):
     '''
-    header comment
+    Return the disussion info of the stocks in the focus group filtered in 
+    the search ranking table and store them in a list. Then save the list
+    in another json file. 
+    
+    Input:
+      date: string of date,  e.g. '035720'
+      
+    Return: a list
     '''
+    
     try:
         with open("../data/discussion/" + date + "_focus/" + date \
                   + "_focus_group.json", "r", encoding="UTF-8") as focus:
@@ -302,13 +334,22 @@ def save_discussion(date):
 
 def filter_opening_increase(date, save=False):
     '''
-    Return whether a stock with given code in the specific date has 
-    opening price higer than closing price. cannot get info before seven
+    Return a list of stock names of stocks in the focus group whose 
+    opening price on the date given is higer than closing price the 
+    date before. 
+    
+    p.s. The info cannot be got after seven days of the data, for the
+    the data would be deleted online
     days ago.
+    
     Inputs:
-      date: string, e.g. '2018-03-08'
-    Return: boolean
+      date: string of date, e.g. '2018-03-08', korea work days only
+      save: boolean, default is False, if True, save the list in another 
+            file in the save directory of the focus group info. 
+            
+    Return: a list
     '''
+    
     try:
         with open("../data/discussion/" + date + "_focus/" + date \
                   + "_focus_group.json", "r", encoding="UTF-8") as focus:
@@ -344,12 +385,16 @@ def filter_opening_increase(date, save=False):
 
 def scrape_price_history(code, time):
     '''
-    Scrape the history price information and store it inside a dictionary
-    of the given stock in the given date and time(hour and minute. It cannot 
-    scrape information more than ten days before, as long as it's a weekday.
-    Input: 
-      code: the string of stock code
-      time: the string of date 201802280901
+    Scrape the history price information of the stock with the given code 
+    on the given date, given time, and store the information in a dictionaty, 
+    including price, price difference compared with one minute ago, selling 
+    price, buying price, volume of trade and variation of price. It cannot 
+    scrape information more than seven days before, and workday only.
+    
+    Inputs: 
+      code: the string of stock code, e.g. '035720'
+      time: the string of date, e.g. '201802280901'
+      
     Return: a dictionary
     '''
     target = "http://finance.naver.com/item/sise_time.nhn?code=" + code + \
@@ -378,7 +423,15 @@ def scrape_price_history(code, time):
 
 def scrape_market_history(date, save=False):
     '''
-    Get market price index for
+    Get market price index of the given date, both kospi index  and 
+    kosdaq index and store them in a tuple.
+    
+    Input:
+      date: string of date, e.g. '2018-03-08', korea work days only
+      save: boolean, if True save the index info on the given date 
+            inside a json file
+            
+    Return: a tuple
     '''
     time = []
     for i in range(9,16):
@@ -458,43 +511,17 @@ def scrape_market_history(date, save=False):
     return (kospi, kosdaq)
 
 
-def scrape_price_history(code, time):
-    '''
-    Scrape the history price information and store it inside a dictionary
-    of the given stock in the given date and time(hour and minute. It cannot 
-    scrape information more than ten days before, as long as it's a weekday.
-    Input: 
-      code: the string of stock code
-      time: the string of date 201802280901
-    Return: a dictionary
-    '''
-    target = "http://finance.naver.com/item/sise_time.nhn?code=" + code + \
-             "&thistime=" + time + "01&page=1"
-    pm = urllib3.PoolManager()
-    html = pm.urlopen(url=target, method="GET").data
-    soup = bs4.BeautifulSoup(html, 'lxml')
-    data_list = soup.find_all("tr")[2].find_all("td",class_="num")
-    data_dic = {}
-    data_dic["price"] = data_list[0].text
-    image = data_list[1].find("img")
-    if image != None:
-        if image["alt"] == "상승":
-            data_dic["price_dif"] = data_list[1].text.strip("\n\t")
-        else:
-            data_dic["price_dif"] = "-" + data_list[1].text.strip("\n\t")
-    else:
-        data_dic["price_dif"] = 0
-    data_dic["sell"] = data_list[2].text
-    data_dic["buy"] = data_list[3].text
-    data_dic["volume"] = data_list[4].text
-    data_dic["variation"] = data_list[5].text
-    
-    return data_dic
-
-
 def save_price(date):
     '''
-    header comment
+    Store the price info of every focus stock on the given date in a list
+    and store all the lists in a list.
+    
+    It takes more than thrity minutes to finish running. 
+    
+    Input: 
+      date: string of date, e.g. '2018-03-08', korea work days only
+    
+    Return: list of lists 
     '''
     opening_increase = "../data/price/" + date + "_price/" + date +\
                             "_opening_increase.json"
