@@ -138,7 +138,7 @@ def save_model(method):
         model = PCR.PCR_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
     elif method == "SVM":
         par_list = [{'C': [0.01, 0.1, 1, 10, 100, 1000], 'gamma': [0.5, 1, 2, 3, 4]}]
-        svm = SVM.SVM_mod(par_list, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
+        model = SVM.SVM_mod(par_list, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                           Y_TEST, TEST_IN)
     else:
         print("Invalid method")
