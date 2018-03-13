@@ -5,7 +5,7 @@
 
 
 ### Index of Files
-* code - codes for webscraping, data cleaning and modeling (read detailed comments in each .py files)
+* code - codes for webscraping, data cleaning and modeling (read detailed comments in each .py file)
   *  web_scraping.py - different functions to scrap and save different data
   *  data_combining.py - cleans raw data and make a total data frame for analyze  
   *  modeling.py - import different methods to calculate predictions from the data/dataframe/comined_dataframe.json for each model  
