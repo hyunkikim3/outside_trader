@@ -14,7 +14,7 @@ class SVM_model:
         '''
         Construct a SVM model on the data passed. 
 
-        Input:
+        Attributes:
           params: a list with a dictionary inside mapping C, a list of floats,
                   which is penalty for support vectors in the wrong side, 
                   and gamma, list of float, which is negatively related 
@@ -26,8 +26,6 @@ class SVM_model:
           x_test: dataframe, testing set for predictors
           y_test: series, testing set for dependent variable
           test_in: series, price percentage increase in testing set
-
-        Return:
           x_total_train: the whole 'training' set for x to get prediction 
                          combining training set and validation set
           x_total_train: the whole 'training' set for y to get prediction 
