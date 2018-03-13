@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import json
 import matplotlib.pyplot as plt
-
 from sklearn.decomposition import PCA
 from sklearn.model_selection import KFold, cross_val_score
 from sklearn.metrics import mean_squared_error, classification_report,\
