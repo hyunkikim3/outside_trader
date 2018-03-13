@@ -16,7 +16,7 @@ https://github.com/JWarmenhoven/ISLR-python
 
 ### Index of Files
 * code - codes for webscraping, data cleaning and modeling
-	*  Method - files for running different methods on data/dataframe/combined_dataframe.json, files are imported from modeling.py
+	*  method - files for running different methods on data/dataframe/combined_dataframe.json, files are imported from modeling.py
 	*  backtesting.py - calculates and draws balance from the data/dataframe/combined_dataframe.json
   *  modeling.py - import different methods to calculate predictions from the data/dataframe/comined_dataframe.json for each model
   *  webscraping.py - different functions to scrap different data 
