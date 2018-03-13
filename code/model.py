@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import json
 
-from method import KNN, Logistic, PCR_PLS, RF_BAG_BST, SVM
+from method import KNN, PLS, Logistic, RF, BAG, BST, PCR, SVM
 
 
 COLUMNS = ['name', 'code', 'time', 'price', 'time_1', 'price_1', \
