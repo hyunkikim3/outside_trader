@@ -1,0 +1,71 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>Outside Traders</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  		<link rel="stylesheet" href="/static/main/css/bootstrap.min.css">
+  		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+
+		<style>
+		    footer {
+		    	background-color: #555;
+		    	color: white;
+		    	padding: 0.01px;
+		    }
+		</style>
+
+	</head>
+
+	<body>
+
+		<main role="main">
+
+			    
+			<div class="container">
+        <div class="alert alert-info"><h4><p class="text-center"><u>TIME AT {{find_time}}</u></p></h4></div>
+                <p><em> Predicting price and real price </p>
+
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+
+						<tr>
+							<th> name </th>
+							<th> predict price </th>
+							<th> real price </th>
+
+						</tr>
+                    </thead>
+                    <tbody>
+						{% for item in find_data %}
+						<tr>
+							<td>{{item.name}}</td>
+							<td>{{item.current_price}}</td>
+							<td>{{item.real_price}}</td>
+
+						</tr>
+						{% endfor %}
+                    </tbody>
+                </table>
+
+
+		    </div><!-- /container -->
+
+		</main>
+
+
+		<footer class="container">
+			<p>CAPP 30122 Winter2018</p>
+		</footer>
+
+	</body>
+
+</html>

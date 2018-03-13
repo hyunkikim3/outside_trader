@@ -1,0 +1,77 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <title>Outside Traders</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% load staticfiles %}
+        <link rel="stylesheet" href="/static/main/css/bootstrap.min.css">
+        
+
+
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+       
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+
+
+        <style>
+            footer {
+                background-color: #555;
+                color: white;
+                padding: 0.01px;
+            }
+        </style>
+
+    </head>
+
+    <body>
+                
+            <div class="container">
+
+        <div class="alert alert-info"><h4><p class="text-center"><u>Tree Portfolio</u></p></h4></div>
+                <p><em> Transaction history using the <strong>searching ranking</strong> data</em></p>
+
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+
+                        <tr>
+                            <th> NAME </th>
+                            <th> SEARCH TIME</th>
+                            <th> SELLING TIME </th>
+                            <th> BUYING PRICE </th>
+                            <th> ACTUAL PRICE </th>
+                            <th> PRICE INCREASE </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in trans %}
+                        <tr>
+                            <td>{{item.name}}</td>
+                            <td>{{item.search_time}}</td>
+                            <td>{{item.selling_time}}</td>
+                            <td>{{item.buying_price}}</td>
+                            <td>{{item.actual_price}}</td>
+                            <td>{{item.price_increase}}</td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div><!-- /container -->
+
+
+    </body>
+
+        <footer class="container">
+            <p>CAPP 30122 Winter2018</p>
+        </footer>
+
+</html>

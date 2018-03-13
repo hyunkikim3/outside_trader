@@ -1,0 +1,122 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>Outside Traders</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		{% load staticfiles %}
+  		<link rel="stylesheet" href="/static/main/css/bootstrap.min.css">
+
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>		
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/highcharts-more.js"></script>
+		<script src="https://code.highcharts.com/stock/highstock.js"></script>
+		<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+
+
+		<style>
+		    footer {
+		    	background-color: #555;
+		    	color: white;
+		    	padding: 0.01px;
+		    }
+		</style>
+
+	</head>
+
+	<body>
+			    
+			<div class="container">
+
+				<h1 class="display-3">This is the table</h1>
+
+					<table>
+						<tr>
+							<th> time </th>
+							<th> name </th>
+						</tr>
+						{% for item in market %}
+						<tr>
+							<td>{{item.time}}</td>
+							<td>{{item.kospi_index}}</td>
+						</tr>
+						{% endfor %}
+					</table>
+							
+
+				<h1 class="display-3">This is the graph</h1>
+
+				<div id="container" style="height: 400px; min-width: 600px, auto;"></div>
+
+			</div><!-- /container -->
+
+
+<script>
+
+
+	Highcharts.chart('container',{
+
+	    		chart: {
+	    			type: 'spline'
+	    		},
+
+	    		title: {
+	    			text: 'Stock Models'
+	    		},
+
+	    		legend:{
+	    			enabled: false,
+	    		},
+
+	    		xAxis: {
+	    			type: 'datetime',
+	    			labels: {
+	    				formatter: function(){
+	    					return Highcharts.dateFormat('%Y-%m-%d<br/>%H:%M', this.value)
+	    				}
+	    			},
+	    		},
+
+	    		plotOptions: {
+	    			series: {
+	    				marker: {
+	    					enabled: true,
+	    					symbol: 'circle',
+	    					radius: 1,
+	    					states: {
+	    						hover: {
+	    							enabled: true
+	    						}
+	    					}
+	    				},
+
+	    			}
+
+	    		},
+
+	    		series: [{
+	    			name: "KOSPI",
+	    			data: [
+	    				{% for item in market %}
+	    					{x: Date.parse('{{item.time}}'),
+	    					y: {{item.kospi_index}}},
+	    				{% endfor %}
+	    			]
+
+	    		}]
+
+	    	});
+
+
+
+</script>
+
+
+
+		<footer class="container">
+			<p>CAPP 30122 Winter2018</p>
+		</footer>

@@ -1,0 +1,13 @@
+{% extends "main/header.html" %}
+
+{% block content %}
+<!--<p> Welcome to our website! </p>
+
+{% include "main/includes/htmlsnippet.html" %}-->
+
+<ul class="collection">
+	{% for stock in stocks %}
+		<li class="collection-item"><a href="/main/stocks/{{stock.code}}">{{stock.name}}</a></li>
+	{% endfor %}
+</ul>
+{% endblock %}

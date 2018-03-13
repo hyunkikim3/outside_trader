@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>Outside Traders</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		{% load staticfiles %}
+  		<link rel="stylesheet" href="/static/main/css/bootstrap.min.css">
+
+
+		<style>
+
+			body {
+				background-color: 
+			}
+		    footer {
+		    	background-color: #555;
+		    	color: white;
+		    	padding: 0.01px;
+		    }
+
+		</style>
+
+	</head>
+
+	<!--<body class="body" style="background-color:#f6f6f6">-->
+
+	<body>
+
+			<div class="jumbotron">
+				<div class="container">
+				  <h1 class="display-3"><strong>OUTSIDE TRADERS</strong></h1>
+				  <p class="lead"><em>This program predicts stock price every 10 minutes using various variables</em></p>
+				  <p class="lead">
+				  	<h1><a href="{% url 'choose' %}" class="btn btn-primary btn-lg" role="button">To the Result Page &raquo;</a></h1>
+				  </p>
+				</div>
+			</div>
+
+
+
+
+
+		<main role="main">
+
+			<div style="margin-left: auto; margin-right:auto; margin-bottom: 30px;width:700px;">
+
+				<form action="/result">
+					<h3 style = " margin-bottom: 15px;"><p class="text-center" >Type the date and time ex) 2018-02-14 10:30</p></h3>
+				  <button style="float:right;"> <span class="glyphicon glyphicon-search"></span></button>
+				  <div style="overflow:hidden; padding-right: .5em;">
+				  	<input type="text" style="width:100%;" id="find_time" name="find_time"><br>
+				  </div>
+				 </form>
+
+			</div>
+
+		<div class="container">
+
+	        <!-- Three columns of project contributors -->
+	       	<h2 style = " margin-bottom: 70px;"><p class="text-center" ><strong>The Wolf of the 53rd Street</strong></p></h2>
+
+
+	        <div class="row">
+
+	          <div class="col-lg-4">
+		            <img class="img-responsive, rounded-circle" src="{% static 'main/img/ki2.jpg' %}" alt="Generic placeholder image" width="150" height="150">
+		            <h1>Hyun Ki Kim</h1>
+	          </div><!-- /.col-lg-4 -->
+
+	          <div class="col-lg-4">
+		            <img class="img-responsive, rounded-circle" src="{% static 'main/img/js.jpg' %}" alt="Generic placeholder image" width="150" height="150">
+		            <h1>Jessica Song</h1>
+	          </div><!-- /.col-lg-4 -->
+
+	          <div class="col-lg-4">
+		            <img class="img-responsive, rounded-circle" src="{% static 'main/img/2wei.jpg' %}" alt="Generic placeholder image" width="150" height="150">
+		            <h1>Weiwei Zheng</h1>
+	          </div><!-- /.col-lg-4 -->
+	        </div><hr><!-- /.row -->
+
+	    </div><!-- /container -->
+
+		</main>
+
+
+		<footer class="container">
+			<p>CAPP 30122 Winter2018</p>
+		</footer>
+
+	</body>
+
+</html>
