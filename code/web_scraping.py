@@ -586,6 +586,16 @@ def save_price(date):
 
 
 def ranking_dictionary(target):
+    '''
+    srape the real time search ranking of naver finance website and store them
+    in a dictionary
+    
+    Input:
+      target: string of html, "http://finance.naver.com/sise/lastsearch2.nhn"
+    
+    Return: a dictionary
+    '''
+    
     pm = urllib3.PoolManager()
     html = pm.urlopen(url=target, method="GET").data
     soup = bs4.BeautifulSoup(html, 'lxml')
@@ -597,10 +607,14 @@ def ranking_dictionary(target):
             rank = tag.find_all("td", class_ = "no")[0].text
             name = tag.find_all("td", class_ = "no")[0].next_sibling.next_sibling.find_all("a")[0].text
             stock_dict[rank] = name
+            
     return stock_dict
 
 
 def ranking_job_function():
+    '''
+    save the real tme search ranking data in a json file
+    '''
     import json
     
     rank = ranking_dictionary("http://finance.naver.com/sise/lastsearch2.nhn")
@@ -640,6 +654,9 @@ def discussion_job_function():
 
 
 def cron(date):
+    '''
+    
+    '''
     try:
         with open("../data/krx_code.json", "r", encoding="UTF-8") as f:
             krx = json.load(f)
