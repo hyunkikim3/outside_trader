@@ -132,11 +132,11 @@ def get_balance_report(data, var_list=['KNN', 'PLS', 'Logistic', 'Random Forest'
     return report
 
 
-def draw_balance_report(model):
+def draw_balance_report(method):
     '''
-    Draw graph and print results of the specific model and market result.
+    Draw graph and print results of the specific method and market result.
     Input:
-      model: string, 'AVG', KNN', 'PLS', 'Logistic', 'Random Forest', \
+      method: string, 'AVG', KNN', 'PLS', 'Logistic', 'Random Forest', \
                      'Bagging', 'Boosting', 'PCR', 'Tree'
     Return:
     '''
@@ -153,32 +153,32 @@ def draw_balance_report(model):
     testing = total[11629:]
     
     
-    if model == "AVG":
+    if method == "AVG":
         df = pd.DataFrame({"x": range(0, 146), \
                            "y1": result["KOSPI_balance"], \
                            "y2": result["KOSDAQ_balance"]})
         sub_df = testing
         plt.title("Market average")
     else:
-        balance_text = balance_text = model + "_balance"
+        balance_text = balance_text = method + "_balance"
         
         try:
             df = pd.DataFrame({"x": range(0, 146), \
                                "y1": result["KOSPI_balance"], \
                                "y2": result["KOSDAQ_balance"],\
                                "y3": result[balance_text]})
-            sub_df = testing[testing[model] == 1]
-            plt.title(model)
-            plt.plot(df["x"], df["y3"], label=model)
+            sub_df = testing[testing[method] == 1]
+            plt.title(method)
+            plt.plot(df["x"], df["y3"], label=method)
         except KeyError:
-            print("Invalid model")
+            print("Invalid method")
             return None
 
     plt.plot(df["x"], df["y1"], label="KOSPI")
     plt.plot(df["x"], df["y2"], label="KOSDAQ")
     plt.legend()
     plt.show()
-    if model != "AVG":
+    if method != "AVG":
         print("Number of trades:", len(sub_df))
     print("Proportion increased more than 0.33%:", \
            sub_df["did_price_033"].mean())
