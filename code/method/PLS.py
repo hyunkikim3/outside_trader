@@ -12,7 +12,6 @@ from sklearn.linear_model import LogisticRegression
 from pylab import rcParams
 from sklearn.preprocessing import scale 
 
-#PLS
 class PLS_mod:
 
     def __init__(self, k, x_train, y_train, x_test, y_test, test_in):
@@ -147,13 +146,3 @@ class PLS_mod:
         y_port = test_in[y_pred >= .5]
 
         return y_port.shape[0], y_port.mean()
-
-
-#write pls prediction to json file, you can hardcode number of principal
-#component by using get_prediction function
-#harcode to k_fold =2, it should be larger than 2
-PLS = PLS_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
-y_pred_pls = PLS.y_pred
-PLS_mod = pd.DataFrame(y_pred_pls, columns = ['PLS'])
-PLS_mod['PLS'] = (PLS_mod['PLS'] >= 0.5).astype(int)
-PLS_mod.to_json('PLS_mod.json', orient='values')
