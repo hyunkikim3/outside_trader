@@ -139,7 +139,7 @@ def draw_balance_report(method):
     Draw graph and print results of the specific method and market result.
     
     Input:
-      method: string, 'AVG', KNN', 'PLS', 'Logistic', 'Random Forest', \
+      method: string, any one of'AVG', KNN', 'PLS', 'Logistic', 'Random Forest', 
                      'Bagging', 'Boosting', 'PCR', 'Tree'
                      
     Return: None
@@ -193,7 +193,14 @@ def draw_balance_report(method):
 
 def get_searching_time(method, save=False):
     '''
-    method: e.g. "Tree"
+    Get the time of each stock appeared in the search ranking table in
+    the best model of the method given. 
+    
+    Inputs:
+      method: string of method, 'Tree'
+      save: boolean, True then save the results in a json file
+    
+    Return: a dataframe
     '''
     df = pd.DataFrame(COMBINED, columns = COL)
     df = df[11629:]
