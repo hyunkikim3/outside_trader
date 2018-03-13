@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import json
 
-from method import KNN, PLS, Logistic, RF, BAG, BST, PCR, SVM
+from method import KNN, PLS, LOGIT, RF, BAG, BST, PCR, SVM
 
 
 COLUMNS = ['name', 'code', 'time', 'price', 'time_1', 'price_1', \
@@ -53,28 +53,9 @@ TO_DEL = ['name', 'code', 'time', 'price', 'time_1', 'time_2', 'time_3', \
           'kosdaq_answer', 'kospi_increase', 'kosdaq_increase', \
           'market_increase']
 
-X_COL = []
-for var in COLUMNS:
-    if var not in TO_DEL:
-        X_COL.append(var)
+X_COL = [var for var in COLUMNS if var not in TO_DEL]
 
-
-try:
-    with open("../data/dataframe/dataframe_02.json", 'r', encoding='UTF-8') as f:
-        FEB = json.load(f)
-except FileNotFoundError as e:
-    print(e)
-
-try:
-    with open("../data/dataframe/dataframe_03.json", 'r', encoding='UTF-8') as f:
-        MAR = json.load(f)
-except FileNotFoundError as e:
-    print(e)
-
-DF_FEB = pd.DataFrame(FEB, columns = COLUMNS)
-DF_MAR = pd.DataFrame(MAR, columns = COLUMNS)
-DF = pd.concat([DF_FEB, DF_MAR])
-DF = DF.dropna(axis=0, how='any')
+DF = combined_dataframe()
 
 #define filter for trainig set, validation test and testing set
 TIME_FILTER_TRAIN = (DF['time'].str.startswith("2018-02-21")) | \
@@ -106,3 +87,64 @@ Y_VALID = VALID_DF['did_price_033']
 X_TEST = TEST_DF[X_COL]
 Y_TEST = TEST_DF['did_price_033']
 TEST_IN = TEST_DF['price_increase']
+
+
+def combined_dataframe(save=False):
+    
+    try:
+        with open("../data/dataframe/dataframe_02.json", 'r', encoding='UTF-8') as f:
+            feb = json.load(f)
+    except FileNotFoundError as e:
+        print(e)
+
+    try:
+        with open("../data/dataframe/dataframe_03.json", 'r', encoding='UTF-8') as f:
+            mar = json.load(f)
+    except FileNotFoundError as e:
+        print(e)
+
+    df_feb = pd.DataFrame(feb, columns = COLUMNS)
+    df_mar = pd.DataFrame(mar, columns = COLUMNS)
+    rv = pd.concat([df_feb, df_mar])
+    rv = rv.dropna(axis=0, how='any')
+    
+    if save:
+        with open("combined_dataframe.json","w", encoding='UTF-8') as f:
+            json.dump(rv, f, ensure_ascii=False)
+    
+    return rv
+
+
+def save_model(method):
+    if method == "KNN":
+        model = KNN.KNN_mod(10, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, Y_TEST, TEST_IN)
+    elif method == "PLS":
+        model = PLS.PLS_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
+    elif method == "Logistic":
+        model = LOGIT.LOGIT_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
+                                Y_TEST, VALID_IN, TEST_IN)
+    elif method = "RF":
+        model = RF.RF_mod(X_TRAIN.shape[1], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
+                          X_TEST, Y_TEST, TEST_IN)
+    elif method = "BAGGING":
+        model = BAG.BAG_mod(1, X_TRAIN.shape[0], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
+                            X_TEST, Y_TEST, TEST_IN)
+    elif method == "BOOSTING":
+        model = BST.BST_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
+                            Y_TEST, TEST_IN)
+    elif method == "PCR":
+        model = PCR.PCR_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
+    elif method == "SVM":
+        par_list = [{'C': [0.01, 0.1, 1, 10, 100, 1000], 'gamma': [0.5, 1, 2, 3, 4]}]
+        svm = SVM.SVM_mod(par_list, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
+                          Y_TEST, TEST_IN)
+    else:
+        print("Invalid method")
+        return None
+    
+    prediction = pd.DataFrame(model.y_pred, columns = [method])
+    if method == "PLS":
+        prediction["PLS"] = (prediction["PLS"] >= 0.5).astype(int)
+    prediction.to_json(method + "_mod.json'\", orient='values')
+    
+    return None
