@@ -18,7 +18,7 @@ df_1hour_Feb.json -> data/dataframe/dataframe_02.json
 
 df_1hour_Mar_07.json -> data/dataframe/dataframe_03.json
 
-balance_Feb27_Mar07_final.json -> data/balance_report_02-27-12-50.json
+balance_Feb27_Mar07_final.json -> data/balance_report/balance_report_02-27-12-50.json
 
 model_df_weiwei_0307_final.json -> data/dataframe/combined_dataframe.json
 
