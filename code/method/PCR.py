@@ -12,8 +12,7 @@ from sklearn.linear_model import LogisticRegression
 from pylab import rcParams
 from sklearn.preprocessing import scale 
 
-#PCR
-class PCR_mod:
+class PCR_model:
 
     def __init__(self, k, x_train, y_train, x_test, y_test, test_in):
         '''
@@ -180,12 +179,3 @@ class PCR_mod:
         shape = y_port.shape[0]
 
         return y_port.shape[0], y_port.mean()
-
-
-#write pcr prediction to json file, you can harcode y_pred
-#by using get_prediction function and setting differnt number of pc
-#harcode to k_fold =2, it should be larger than 2
-PCR = PCR_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
-y_pred_pcr = PCR.y_pred
-PCR_mod = pd.DataFrame(y_pred_pcr, columns = ['PCR'])
-PCR_mod.to_json('PCR_mod.json', orient='values')
