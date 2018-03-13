@@ -17,9 +17,9 @@ except FileNotFoundError as e:
 
 def save_krx_code():
     '''
-    Direct copy form http://excelsior-cjh.tistory.com/entry/5-Pandas를-이용한-Naver금융에서-주식데이터-가져오기
+    Direct copy from http://excelsior-cjh.tistory.com/entry/5-Pandas를-이용한-Naver금융에서-주식데이터-가져오기
     
-    save the table into file mapping different stock names and stock codes 
+    save the table mapping different stock names and stock codes into file
     (It takes more than 30 minutes to finish running)
     '''
     code_df = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?\
@@ -72,6 +72,8 @@ def save_company_info():
     '''
     save the dictionary mappping different stock codes to company 
     names to json file
+    
+    Return: a list
     '''
     company_df = pd.DataFrame(list(KRX_CODE.items()), 
                  columns=['name', 'code'])
@@ -99,7 +101,7 @@ def scrape_ranking(save=False):
       save: boolean, default = False, if true save the ranking 
              dictionary into a file
     
-    Return
+    Return: a dictionary
     '''
     pm = urllib3.PoolManager()
     target = "http://finance.naver.com/sise/lastsearch2.nhn"
@@ -134,7 +136,7 @@ def scrape_ranking(save=False):
 
 def scrape_5day_high_low(code):
     '''
-    scrape the the maximum and minimum of a stock in th previous 
+    scrape the the maximum and minimum of a stock in the previous 
     five trading days and save them as a tuple.
     
     Input: 
@@ -164,7 +166,7 @@ def scrape_5day_high_low(code):
 def filter_quiet_stock(date, save=False):
     '''
     Filter and only save the stocks in the ranking table file 
-    of the given date which appear only once in ranking overnight 
+    of the given date, which appear only once in ranking overnight 
     price volatility are less than 50 percent in five days. Return
     them in a list. 
     
@@ -236,7 +238,7 @@ def filter_quiet_stock(date, save=False):
 
 def scrape_discussion(code):
     '''
-    scrape the real time discussion forum information (post_num, unique_id, 
+    Scrape the real time discussion forum information (post_num, unique_id, 
     click, like, dislike) of stock of given stock code from the day before 
     till the moment(current time 2018-2-14 15:00 then scrape cumulative info 
     from 2018-2-13 00:00 to now) and save it inside a dictionary.
@@ -424,10 +426,10 @@ def scrape_price_history(code, time):
 def scrape_market_history(date, save=False):
     '''
     Get market price index of the given date, both kospi index  and 
-    kosdaq index and store them in a tuple.
+    kosdaq index, and store them in a tuple.
     
     Input:
-      date: string of date, e.g. '2018-03-08', korea work days only
+      date: string of date, e.g. '2018-03-08', korea workdays only
       save: boolean, if True save the index info on the given date 
             inside a json file
             
