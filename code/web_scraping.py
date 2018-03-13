@@ -21,7 +21,6 @@ def save_krx_code():
     Direct copy from http://excelsior-cjh.tistory.com/entry/5-Pandas를-이용한-Naver금융에서-주식데이터-가져오기
     
     save the table mapping different stock names and stock codes into file
-    (It takes more than 30 minutes to finish running)
     '''
     code_df = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?\
                             method=download&searchType=13', header=0)[0]
