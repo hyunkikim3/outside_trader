@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import json
 
-from method import KNN, PLS, LOGIT, RF, BAG, BST, PCR, SVM
+from method import KNN, PLS, LOGIT, RF, BAG, BST, PCR, SVM, Tree
 
 
 COLUMNS = ['name', 'code', 'time', 'price', 'time_1', 'price_1', \
@@ -140,6 +140,8 @@ def save_model(method):
         par_list = [{'C': [0.01, 0.1, 1, 10, 100, 1000], 'gamma': [0.5, 1, 2, 3, 4]}]
         model = SVM.SVM_model(par_list, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                           Y_TEST, TEST_IN)
+    elif method == "Tree":
+        #model = Tree.Tree_model()
     else:
         print("Invalid method")
         return None
