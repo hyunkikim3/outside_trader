@@ -5,9 +5,7 @@ from sklearn.metrics import mean_squared_error, confusion_matrix, \
                             classification_report
 from sklearn import neighbors
 
-#KNN
-
-class KNN_mod:
+class KNN_model:
 
     def __init__(self, max_num, x_train, y_train, x_valid, y_valid, x_test, \
                  y_test, test_in):
@@ -182,8 +180,3 @@ class KNN_mod:
         y_port = test_in[y_pred == 1]
 
         return y_port.shape[0], y_port.mean()
-
-
-knn = KNN_mod(10, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, Y_TEST, TEST_IN)
-model = pd.DataFrame(knn.y_pred, columns = ['KNN'])
-model.to_json('KNN_mod.json', orient='values')
