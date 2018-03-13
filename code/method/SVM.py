@@ -7,8 +7,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, classification_report
 
-#SVM
-class SVM_mod:
+class SVM_model:
 
     def __init__(self, params, x_train, y_train, x_valid, y_valid, x_test, \
                  y_test, test_in):
@@ -163,13 +162,3 @@ class SVM_mod:
         y_port = test_in[y_pred == 1]
 
         return y_port.shape[0], y_port.mean()
-
-
-#write best prediction to file
-#however, the best prediction might all be 0
-#you can hard code to get prediction by using the get_prediction method
-par_list = [{'C': [0.01, 0.1, 1, 10, 100, 1000], 'gamma': [0.5, 1, 2, 3, 4]}]
-svm = SVM_mod(par_list, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, Y_TEST, \
-	          TEST_IN)
-model = pd.DataFrame(svm.y_pred, columns = ['SVM'])
-model.to_json('SVM_mod.json', orient='values')
