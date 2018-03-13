@@ -15,14 +15,15 @@ https://github.com/UC-MACSS/persp-model_W18
 https://github.com/JWarmenhoven/ISLR-python
 
 ### Index of Files
-* code - codes for webscraping, data cleaning and modeling
-	*  method - files for running different methods on data/dataframe/combined_dataframe.json, files are imported from modeling.py
-	*  backtesting.py - calculates and draws balance from the data/dataframe/combined_dataframe.json
+* code - codes for webscraping, data cleaning and modeling (read detailed comments in each .py files)
+  *  method - files for running different methods on data/dataframe/combined_dataframe.json, files are imported from modeling.py
+  *  backtesting.py - functions for calculating and drawing balance from the data/dataframe/combined_dataframe.json, and getting all search time of Tree model
+  *  datacombining.py - cleans raw data and make a total data frame for analyze
   *  modeling.py - import different methods to calculate predictions from the data/dataframe/comined_dataframe.json for each model
   *  webscraping.py - different functions to scrap and save different data 
                 
 * data - raw data files and clean/modified data files 
-	*  balance_report - balance sample file (result) for February 27
+  *  balance_report - balance sample file (result) for February 27
   *  dataframe - dataframes for February (without prediction), March (without prediction) and a combined dataframe (with prediction)
   *  discussion - discussion raw data from February 20 to March 7 (trading days only)
   *  market - market index raw data from February 20 to March 7
@@ -65,5 +66,10 @@ To load data:
     
     i.e. from main.models import MODEL_NAME
     
+### student responsibiliy 
+* Hyun Ki Kim - method folder, backtesting.py, datacombining.py, modeling.py
+* Jessica Jee Yoon Song - website folder
+* Weiwei Zheng - method, datacombining, modeling, webscraping
+
 
  
