@@ -53,13 +53,6 @@ TO_DEL = ['name', 'code', 'time', 'price', 'time_1', 'time_2', 'time_3', \
           'kosdaq_answer', 'kospi_increase', 'kosdaq_increase', \
           'market_increase']
 
-TREE_DEL = ['did_price_033_sq', 'did_price_100_sq', 'did_price_150_sq', \
-            'did_price_increase_sq', 'ko_inter_sq', 'kosdaq_1', \
-            'kosdaq_1_sq', 'kosdaq_2', 'kosdaq_2_sq', 'kosdaq_3', \
-            'kosdaq_3_sq', 'kosdaq_trend', 'kosdaq_trend_sq', 'kospi_1', \
-            'kospi_1_sq', 'kospi_2', 'kospi_2_sq', 'kospi_3', 'kospi_3_sq', \
-            'kospi_trend', 'kospi_trend_sq', 'price_increase_sq', 'price_sq']
-
 X_COL = [var for var in COLUMNS if var not in TO_DEL]
 
 DF = concate_monthly_dataframe()
@@ -144,7 +137,7 @@ def save_model(method):
         model = SVM.SVM_model(par_list, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                           Y_TEST, TEST_IN)
     elif method == "Tree":
-        #model = Tree.Tree_model()
+        model = Tree.Tree_model(6, 100, X_TEST)
     else:
         print("Invalid method")
         return None
