@@ -12,7 +12,7 @@ class LOGIT_model:
         '''
         Construct a logistic model on the data passed. 
 
-        Input:
+        Attributes:
           x_train: dataframe, training set for predictors
           y_train: series, training set for dependet variable
           x_valid: dataframe, validation set for predictors
@@ -21,8 +21,6 @@ class LOGIT_model:
           y_test: series, testing set for dependent variable
           valid_in: series, price percentage increase in validation set
           test_in: series, price percentage increase in testing set
-
-        Return:
           best_var: string, the variable which can get the lowest error rate
                     for y = 1validation set
           best_vars: list, the list of variables found out sequentially which 
