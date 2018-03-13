@@ -5,12 +5,14 @@ import matplotlib.pyplot as plt
 from datetime import datetime, tzinfo, timedelta
 
 try:
-    with open('../data/dataframe/combined_dataframe.json', 'r', encoding='UTF-8') as f:
+    with open('../data/dataframe/combined_dataframe.json', 'r', \
+              encoding='UTF-8') as f:
         COMBINED = json.load(f)
 except FileNotFoundError as e:
     print(e)
 
-METHOD = ['KNN', 'PLS', 'Logistic', 'Random Forest', 'Bagging', 'Boosting', 'PCR', 'Tree']
+METHOD = ['KNN', 'PLS', 'Logistic', 'Random Forest', 'Bagging', \
+          'Boosting', 'PCR', 'Tree']
 
 COL = ['index', 'name', 'code', 'time', 'price', 'time_1', 'price_1', \
        'price_dif_1', 'sell_1', 'buy_1', 'volume_1', 'variation_1', \
@@ -53,8 +55,9 @@ COL = ['index', 'name', 'code', 'time', 'price', 'time_1', 'price_1', \
        'Bagging', 'Boosting', 'PCR', 'Tree']
 
 
-def get_balance_report(data, var_list=['KNN', 'PLS', 'Logistic', 'Random Forest', \
-                                       'Bagging', 'Boosting', 'PCR', 'Tree'], \
+def get_balance_report(data, var_list=['KNN', 'PLS', 'Logistic', \ 
+                                       'Random Forest', 'Bagging', \
+                                       'Boosting', 'PCR', 'Tree'], \
                        starting="2018-02-27 12:50", save=False):
     '''
     Calculate balance for each model out from the data passed and create a 
@@ -81,7 +84,8 @@ def get_balance_report(data, var_list=['KNN', 'PLS', 'Logistic', 'Random Forest'
     try:
         init["kospi_answer"] = df[df["time_3"] == starting].iloc[0]["kospi_3"]
         init["kosdaq_answer"] = df[df["time_3"] == starting].iloc[0]["kosdaq_3"]
-        gb = pd.concat([init, gb[gb.reset_index()[gb.reset_index()["time"] == predicting].index.tolist()[0]:]])
+        gb = pd.concat([init, gb[gb.reset_index()[gb.reset_index()["time"] == \
+                                                  predicting].index.tolist()[0]:]])
     
     except IndexError:
         print("Invalid starting time")
@@ -89,7 +93,7 @@ def get_balance_report(data, var_list=['KNN', 'PLS', 'Logistic', 'Random Forest'
     
     for var in var_list:
         gb[var + "_increase"] = 1 + (df[df[var] == 1\
-                                    ].groupby("time")["price_increase"].mean())/100
+                                ].groupby("time")["price_increase"].mean())/100
         gb[var + "_balance"] = np.nan
         gb[var + "_balance"].loc[starting] = 100
 
@@ -144,7 +148,8 @@ def draw_balance_report(method):
                      
     Return: None
     '''
-    with open('../data/balance_report/balance_report_02-27-12-50.json', 'r', encoding='UTF-8') as f:
+    with open('../data/balance_report/balance_report_02-27-12-50.json', 'r', \
+              encoding='UTF-8') as f:
         balance = json.load(f)
 
     balance_col = ["index", "KOSPI_balance", "KOSDAQ_balance", "KNN_balance", \
@@ -234,8 +239,10 @@ def get_searching_time(method, save=False):
                 if flag != "":
                     break
 
-                filename = "../data/ranking/" + yesterday + "/" + yesterday + \
-                            "-" + ("0" + str(hour) if hour <= 9 else str(hour)) + \
+                filename = "../data/ranking/" + yesterday + "/" + \
+                            yesterday + \
+                            "-" + ("0" + str(hour) if hour <= 9 else \
+                                   str(hour)) + \
                             "-" + str(minute) + "0.json"
 
                 try:
@@ -262,7 +269,8 @@ def get_searching_time(method, save=False):
                         continue
 
                     filename = "../data/ranking/" + today + "/" + today + \
-                               "-" + ("0" + str(hour) if hour <= 9 else str(hour)) + \
+                               "-" + ("0" + str(hour) if hour <= 9 \
+                                      else str(hour)) + \
                                "-" + str(minute) + "0.json"
                     try:
                         with open(filename, 'r', encoding='UTF-8') as f:
@@ -277,7 +285,8 @@ def get_searching_time(method, save=False):
 
         df.set_value(idx, "search_time", flag)
 
-    rv = df[["time", "name", "price_3", "price","price_increase", "search_time"]]
+    rv = df[["time", "name", "price_3", "price","price_increase", \
+             "search_time"]]
     
     if save:
         rv.to_json("searching_time_" + method + ".json", orient = "values")
