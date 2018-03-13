@@ -140,7 +140,7 @@ def draw_balance_report(method):
                      'Bagging', 'Boosting', 'PCR', 'Tree'
     Return:
     '''
-    with open('../data/balance_report_02-27-12-50.json', 'r', encoding='UTF-8') as f:
+    with open('../data/balance_report/balance_report_02-27-12-50.json', 'r', encoding='UTF-8') as f:
         balance = json.load(f)
 
     balance_col = ["index", "KOSPI_balance", "KOSDAQ_balance", "KNN_balance", \
