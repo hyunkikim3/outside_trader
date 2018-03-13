@@ -6,8 +6,7 @@ from sklearn.metrics import classification_report, confusion_matrix, \
 from sklearn.ensemble import RandomForestClassifier, \
                             GradientBoostingClassifier, BaggingClassifier
 
-#Bagging
-class BAGGING_mod:
+class BAG_model:
 
     def __init__(self, min_num, max_num, x_train, y_train, x_valid, y_valid, \
                  x_test, y_test, test_in):
@@ -176,9 +175,3 @@ class BAGGING_mod:
         y_port = test_in[y_pred == 1]
 
         return y_port.shape[0], y_port.mean()
-
-
-BAG = BAGGING_mod(1, X_TRAIN.shape[0], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
-                  X_TEST, Y_TEST, TEST_IN)
-BAG_model = pd.DataFrame(BAG.y_pred, columns = ['BAGGING'])
-BAG_model.to_json('BAGGING_mod.json', orient='values')
