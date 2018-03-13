@@ -96,12 +96,14 @@ def combined_dataframe(save=False):
             feb = json.load(f)
     except FileNotFoundError as e:
         print(e)
+        return None
 
     try:
         with open("../data/dataframe/dataframe_03.json", 'r', encoding='UTF-8') as f:
             mar = json.load(f)
     except FileNotFoundError as e:
         print(e)
+        return None
 
     df_feb = pd.DataFrame(feb, columns = COLUMNS)
     df_mar = pd.DataFrame(mar, columns = COLUMNS)
