@@ -15,10 +15,10 @@
 * data - raw data files and clean/modified data files 
   *  balance_report - balance sample file (result) for February 27
   *  dataframe - dataframes for February (without prediction), March (without prediction) and a combined dataframe (with prediction)
-  *  discussion - discussion raw data from February 20 to March 7 (trading days only)
-  *  market - market index raw data from February 20 to March 7
+  *  discussion - discussion raw data from February 14 to March 7 (trading days only)
+  *  market - market index raw data from February 14 to March 7
   *  model - prediction results for each best model made from each machine learning method
-  *  price - price raw data from Feburary 20 to March 7
+  *  price - price raw data from Feburary 14 to March 7
   *  ranking - ranking table raw data from Feburary 8
   *  searching_time - the time when stocks in Tree (best model) portfolio appeared in search ranking table
   *  company_info.json - company data for each stock
