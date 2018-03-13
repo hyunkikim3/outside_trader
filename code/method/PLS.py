@@ -12,7 +12,7 @@ from sklearn.linear_model import LogisticRegression
 from pylab import rcParams
 from sklearn.preprocessing import scale 
 
-class PLS_mod:
+class PLS_model:
 
     def __init__(self, k, x_train, y_train, x_test, y_test, test_in):
         '''
