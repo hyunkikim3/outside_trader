@@ -6,11 +6,11 @@
 
 ### Index of Files
 * code - codes for webscraping, data cleaning and modeling (read detailed comments in each .py files)
+  *  webscraping.py - different functions to scrap and save different data
+  *  datacombining.py - cleans raw data and make a total data frame for analyze
+  *  modeling.py - import different methods to calculate predictions from the data/dataframe/comined_dataframe.json for each model
   *  method - files for running different methods on data/dataframe/combined_dataframe.json, files are imported from modeling.py
   *  backtesting.py - functions for calculating and drawing balance from the data/dataframe/combined_dataframe.json, and getting all search time of Tree model
-  *  datacombining.py - cleans raw data and make a total data frame for analyze
-  *  modeling.py - import different methods to calculate predictions from the data/dataframe/comined_dataframe.json for each model
-  *  webscraping.py - different functions to scrap and save different data 
                 
 * data - raw data files and clean/modified data files 
   *  balance_report - balance sample file (result) for February 27
