@@ -55,6 +55,11 @@ To load data:
     "python3 manage.py shell"
     
     i.e. from main.models import MODEL_NAME
+
+### Package to install
+* apscheduler
+* scikit-learn
+* graphviz
     
 ### Students' Responsibiliy 
 * Hyun Ki Kim - method folder, backtesting.py, datacombining.py, modeling.py
