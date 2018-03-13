@@ -55,7 +55,7 @@ TO_DEL = ['name', 'code', 'time', 'price', 'time_1', 'time_2', 'time_3', \
 
 X_COL = [var for var in COLUMNS if var not in TO_DEL]
 
-DF = get_combined_dataframe()
+DF = concate_monthly_dataframe()
 
 #define filter for trainig set, validation test and testing set
 TIME_FILTER_TRAIN = (DF['time'].str.startswith("2018-02-21")) | \
@@ -89,7 +89,7 @@ Y_TEST = TEST_DF['did_price_033']
 TEST_IN = TEST_DF['price_increase']
 
 
-def get_combined_dataframe(save=False):
+def concate_monthly_dataframe():
     
     try:
         with open("../data/dataframe/dataframe_02.json", 'r', encoding='UTF-8') as f:
@@ -109,10 +109,6 @@ def get_combined_dataframe(save=False):
     df_mar = pd.DataFrame(mar, columns = COLUMNS)
     rv = pd.concat([df_feb, df_mar])
     rv = rv.dropna(axis=0, how='any')
-    
-    if save:
-        with open("combined_dataframe.json","w", encoding='UTF-8') as f:
-            json.dump(rv, f, ensure_ascii=False)
     
     return rv
 
