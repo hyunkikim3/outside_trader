@@ -122,16 +122,16 @@ def save_model(method):
         model = KNN.KNN_mod(10, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, Y_TEST, TEST_IN)
     elif method == "PLS":
         model = PLS.PLS_mod(2, X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, TEST_IN)
-    elif method == "Logistic":
+    elif method == "LOGIT":
         model = LOGIT.LOGISTIC_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                                 Y_TEST, VALID_IN, TEST_IN)
     elif method = "RF":
         model = RF.RandomForest_mod(X_TRAIN.shape[1], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
                           X_TEST, Y_TEST, TEST_IN)
-    elif method = "BAGGING":
+    elif method = "BAG":
         model = BAG.BAGGING_mod(1, X_TRAIN.shape[0], X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, \
                             X_TEST, Y_TEST, TEST_IN)
-    elif method == "BOOSTING":
+    elif method == "BST":
         model = BST.BOOSTING_mod(X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, \
                             Y_TEST, TEST_IN)
     elif method == "PCR":
@@ -147,6 +147,6 @@ def save_model(method):
     prediction = pd.DataFrame(model.y_pred, columns = [method])
     if method == "PLS":
         prediction["PLS"] = (prediction["PLS"] >= 0.5).astype(int)
-    prediction.to_json(method + "_mod.json'\", orient='values')
+    prediction.to_json(method + "_model.json'\", orient='values')
     
     return None
