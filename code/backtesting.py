@@ -60,11 +60,13 @@ def get_balance_report(data, var_list=['KNN', 'PLS', 'Logistic', 'Random Forest'
     Calculate balance for each model out from the data passed and create a 
     balance dataframe for the list of columns passed which only has columns 
     for the two markets and models in the list.
+    
     Input:
       df: a dataframe passed to calculate
       var_list: the list of model column names, \
           e.g. ['KNN', 'Logistic', 'Tree']
       starting: string, e.g. "2018-03-06 10:30"
+      
     Return: a dataframe
     '''
     predicting = starting[:-5] + str(int(starting[-5:-3]) + 1) + starting[-3:]
@@ -135,10 +137,12 @@ def get_balance_report(data, var_list=['KNN', 'PLS', 'Logistic', 'Random Forest'
 def draw_balance_report(method):
     '''
     Draw graph and print results of the specific method and market result.
+    
     Input:
       method: string, 'AVG', KNN', 'PLS', 'Logistic', 'Random Forest', \
                      'Bagging', 'Boosting', 'PCR', 'Tree'
-    Return:
+                     
+    Return: None
     '''
     with open('../data/balance_report/balance_report_02-27-12-50.json', 'r', encoding='UTF-8') as f:
         balance = json.load(f)
