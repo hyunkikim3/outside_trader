@@ -6,7 +6,7 @@ from datetime import datetime, tzinfo, timedelta
 
 try:
     with open('../data/dataframe/combined_dataframe.json', 'r', encoding='UTF-8') as f:
-        MODEL = json.load(f)
+        COMBINED = json.load(f)
 except FileNotFoundError as e:
     print(e)
 
@@ -148,7 +148,7 @@ def draw_balance_report(method):
                    "Bagging_balance", "Boosting_balance", "PCR_balance", \
                    "Tree_balance"]
 
-    total = pd.DataFrame(MODEL, columns=COL)
+    total = pd.DataFrame(COMBINED, columns=COL)
     result = pd.DataFrame(balance, columns=balance_col)
     testing = total[11629:]
     
@@ -191,7 +191,7 @@ def get_searching_time(method, save=False):
     '''
     method: e.g. "Tree"
     '''
-    df = pd.DataFrame(MODEL, columns = COL)
+    df = pd.DataFrame(COMBINED, columns = COL)
     df = df[11629:]
     
     try:
