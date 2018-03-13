@@ -55,6 +55,29 @@ TO_DEL = ['name', 'code', 'time', 'price', 'time_1', 'time_2', 'time_3', \
 
 X_COL = [var for var in COLUMNS if var not in TO_DEL]
 
+def concate_monthly_dataframe():
+    
+    try:
+        with open("../data/dataframe/dataframe_02.json", 'r', encoding='UTF-8') as f:
+            feb = json.load(f)
+    except FileNotFoundError as e:
+        print(e)
+        return None
+
+    try:
+        with open("../data/dataframe/dataframe_03.json", 'r', encoding='UTF-8') as f:
+            mar = json.load(f)
+    except FileNotFoundError as e:
+        print(e)
+        return None
+
+    df_feb = pd.DataFrame(feb, columns = COLUMNS)
+    df_mar = pd.DataFrame(mar, columns = COLUMNS)
+    rv = pd.concat([df_feb, df_mar])
+    rv = rv.dropna(axis=0, how='any')
+    
+    return rv
+
 DF = concate_monthly_dataframe()
 
 #define filter for trainig set, validation test and testing set
@@ -89,30 +112,6 @@ Y_TEST = TEST_DF['did_price_033']
 TEST_IN = TEST_DF['price_increase']
 
 
-def concate_monthly_dataframe():
-    
-    try:
-        with open("../data/dataframe/dataframe_02.json", 'r', encoding='UTF-8') as f:
-            feb = json.load(f)
-    except FileNotFoundError as e:
-        print(e)
-        return None
-
-    try:
-        with open("../data/dataframe/dataframe_03.json", 'r', encoding='UTF-8') as f:
-            mar = json.load(f)
-    except FileNotFoundError as e:
-        print(e)
-        return None
-
-    df_feb = pd.DataFrame(feb, columns = COLUMNS)
-    df_mar = pd.DataFrame(mar, columns = COLUMNS)
-    rv = pd.concat([df_feb, df_mar])
-    rv = rv.dropna(axis=0, how='any')
-    
-    return rv
-
-
 def save_model(method):
     if method == "KNN":
         model = KNN.KNN_model(10, X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, X_TEST, Y_TEST, TEST_IN)
@@ -145,6 +144,6 @@ def save_model(method):
     prediction = pd.DataFrame(model.y_pred, columns = [method])
     if method == "PLS":
         prediction["PLS"] = (prediction["PLS"] >= 0.5).astype(int)
-    prediction.to_json(method + "_model.json'\", orient='values')
+    prediction.to_json(method + "_model.json", orient='values')
     
     return None
